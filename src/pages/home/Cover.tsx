@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Button } from '@mantine/core'
+import { Link } from 'react-router-dom'
 
 function Cover() {
   return (
@@ -11,6 +12,8 @@ function Cover() {
             <h2 className='text-4xl md:text-5xl lg:text-6xl mb-20'>Бизнес инкубатор</h2>
             <Button
               size='md'
+              component={Link}
+              to='/project/1663083353437/edit/incubator'
             >
               Действие
             </Button>                

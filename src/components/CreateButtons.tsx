@@ -4,12 +4,12 @@ import { BsEye } from 'react-icons/bs'
 import { EditProjectContext, styles } from '../pages/project/edit'
 interface CreateButtonsProps {
   back?: string,
-  forward?: string
-  toModerate?: boolean,
+  forward?: string,
+  incubator?: boolean,
   callback?: () => void
 }
 
-function CreateButtons({back, forward, callback, toModerate}: CreateButtonsProps) {
+function CreateButtons({ back, forward, callback, incubator}: CreateButtonsProps) {
 
   const { handleTabChange } = React.useContext(EditProjectContext)
 
@@ -48,11 +48,21 @@ function CreateButtons({back, forward, callback, toModerate}: CreateButtonsProps
             Продолжить
           </Button>
         :
-          <Button
-            size='md'
-          >
-            Отправить на модерацию
-          </Button>
+          incubator 
+            ? 
+              <Button
+                size='md'
+                disabled
+              >
+                Бизнес-инкубатор
+              </Button>
+            :
+              <Button
+                size='md'
+              >
+                Отправить на модерацию
+              </Button>
+          
       }
     </div>
   )

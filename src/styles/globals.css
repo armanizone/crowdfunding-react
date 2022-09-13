@@ -46,3 +46,8 @@ a {
 }
 
 @import './grid.css';
+
+
+.incubator-child:nth-child(6n) {
+  background-color: chartreuse;
+}

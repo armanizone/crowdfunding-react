@@ -8,12 +8,11 @@ import Main from './Main';
 import Details from './Details';
 import Rewards from './Rewards';
 import Verification from './Verification';
-import Incubator from '../incubator';
 
 import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
 import { collection, doc, query, where } from 'firebase/firestore';
 import { db } from '../../../utils/firebase';
-
+import Incubator from './Incubator';
 export interface EditProjectProps {
   project?: IProject,
   id?: string | null, 
@@ -31,7 +30,6 @@ export const styles = {
   checkLabel: 'p-4',
   error: 'px-4 pb-2 -mt-2 text-xs'
 }
-
 interface EditProjectContextProps {
   handleTabChange: (value: string | null) => void
 }
@@ -115,7 +113,7 @@ function EditProject() {
                 <Tabs.Tab value='/edit/details'>Детали</Tabs.Tab>
                 <Tabs.Tab value='/edit/rewards'>Вознаграждения</Tabs.Tab>
                 <Tabs.Tab value='/edit/verification'>Верификация</Tabs.Tab>
-                <Tabs.Tab value='/edit/incubator' disabled>Бизнес-инкубатор</Tabs.Tab>
+                <Tabs.Tab value='/edit/incubator'>Бизнес-инкубатор</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value='/edit' pt='md'>
                 <Main
@@ -142,7 +140,7 @@ function EditProject() {
                   id={id as string}
                 /> 
               </Tabs.Panel>
-              <Tabs.Panel value='/edit/incubator' pt='xl'>
+              <Tabs.Panel value='/edit/incubator' pt='md'>
                   <Incubator
                     // project={project}
                     // id={id as string}

@@ -1,5 +1,9 @@
+import { doc } from 'firebase/firestore'
 import React from 'react'
+import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { Link } from 'react-router-dom'
+import { Card } from '../../components'
+import { db } from '../../utils/firebase'
 
 const styles = {
   container: 'grid grid-cols-4 gap-4',
@@ -8,6 +12,8 @@ const styles = {
 }
 
 function Courses() {
+
+  const [value] = useDocumentData(doc(db, 'projects', '1663083353437'))
 
   return (
     <div className='courses'>
@@ -67,18 +73,14 @@ function Courses() {
           </Link>
         </div>
         <div className={styles.container}>
-          {/* <Card
-            project={{title: 'asdasdasd', description: 'zxczxczxc'}}
-          />
-          <Card
-            project={{title: 'asdasdasd', description: 'zxczxczxc'}}
-          />
-          <Card
-            project={{title: 'asdasdasd', description: 'zxczxczxc'}}
-          />
-          <Card
-            project={{title: 'asdasdasd', description: 'zxczxczxc'}}
-          /> */}
+          {Array(4).fill(value).map((item, i) => {
+            return (
+              <Card
+                key={i}
+                project={item}
+              />
+            )
+          })}
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { Accordion as Acc } from '@mantine/core'
 
 function Accordion() {
   return (
-    <div>
+    <div className='bg-white rounded-md overflow-hidden'>
       <Acc defaultValue='acc'>
         <Acc.Item value='acc'>
           <Acc.Control>Вопрос</Acc.Control>

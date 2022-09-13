@@ -11,6 +11,7 @@ export interface IProject {
   image?: string | null,
   city?: string | null,
   goal?: number | null,
+  category?: string | null,
   duration?: number | null,
   detail_description?: any | null,
   backed?: number,

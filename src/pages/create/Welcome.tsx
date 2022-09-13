@@ -66,11 +66,11 @@ function Welcome() {
                 Реализуй идею и найди единомышленников
               </h2>
             </div>
-            <TextInput
+            {/* <TextInput
               className='w-full text-xl sm:text-2xl'
               placeholder='Ваш email'
               size='xl'
-            />
+            /> */}
             <div >
               <div className='flex gap-2 items-center'>
                 <Checkbox 
