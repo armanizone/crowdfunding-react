@@ -18,9 +18,9 @@ const styles = {
 function Project() {
 
   const [value, loadjng] = useDocumentData(doc(db, 'projects', '1663083353437'))
-  const [values, rewardLoading] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', value?.id ?? ' ')))
+  const [values] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', value?.id ?? ' ')))
 
-  if (loadjng || rewardLoading) return (
+  if (loadjng) return (
     <div className='w-full h-full flex justify-center items-center'>
       <Loader size='lg' />
     </div>
