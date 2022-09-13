@@ -1,0 +1,31 @@
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 250px;
+  grid-template-areas:
+    'cover cover cover sidebar'
+    'stats stats stats sidebar'
+    'courses courses courses .'
+  ;
+  gap: 16px;
+  min-height: 100vh;
+}
+
+.cover {
+  grid-area: cover;
+}
+
+.stats {
+  grid-area: stats;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.courses {
+  grid-area: courses;
+}
+
+.courses-grid {
+  display: grid;
+}
