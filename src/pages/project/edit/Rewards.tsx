@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { EditProjectProps, styles } from '../../../pages/project/edit'
-import { CreateLabel, Reward, CreateButtons } from '../../../components'
+import { CreateLabel, Reward, CreateButtons, FileInput } from '../../../components'
 import { Button, Checkbox, LoadingOverlay, Overlay, Textarea, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates';
 import RewardService from '../../../service/RewardService'
@@ -36,6 +36,11 @@ function Rewards({project, id, rewards}: EditProjectProps) {
     sending: new Date(),
   })
 
+  const [infinite, setInfinite] = React.useState(false)
+
+  const handleInfinite = () => {
+    setInfinite(q => !q)
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string | null) => {
     if (e.target) {
@@ -61,20 +66,49 @@ function Rewards({project, id, rewards}: EditProjectProps) {
             project_id: id,
             image: e
           })
+          .then(e => {
+            setReward({
+              title: '',
+              description: '',
+              how_to_get: '',
+              image: '',
+              cost: 0,
+              count: 0,
+              bought: 0,
+              sending: new Date(),
+            })
+          })
         })
       })
       .finally(() => {
-        handleLoading('create', false)
-        // router.replace(router.asPath)
-        }
-      )
+          handleLoading('create', false)
+      })
+      return
     }
+    RewardService.createReward(id as string, {
+      ...reward,
+      uid: project?.uid,
+      project_id: id,
+      image: null
+    })
+    .then(e => {
+      setReward({
+        title: '',
+        description: '',
+        how_to_get: '',
+        image: '',
+        cost: 0,
+        count: 0,
+        bought: 0,
+        sending: new Date(),
+      })
+    })
   }
 
   return (
     <div>
       <div className={styles.row}>
-        <div className={styles.bgWrapper}>
+        <div className='wrapper'>
           <LoadingOverlay visible={loading.create} />
           <div className='mb-4'>
             <h2 className='text-lg md:text-xl mb-2'>Добавьте вознаграждения в проект</h2>
@@ -96,45 +130,52 @@ function Rewards({project, id, rewards}: EditProjectProps) {
               placeholder="Не более 50 символов"
               required
               variant="unstyled"
+              maxLength={120}
             />
             <div className={styles.restInfo}>
-              asdasd
+              Осталось {120 - (reward?.title?.length! ?? 0)} символов
             </div>
           </CreateLabel>
           <CreateLabel label='Картинка'>
-            <div className="flex items-center relative overflow-hidden">
-              <input
-                type="file"
-                accept="image/*"
-                name="image"
-                className={styles.fileInput}
+            <div className='p-4'>
+              <FileInput
+                label='Загрузить изображение'
                 onChange={handleImage}
-                required
+                accept='image/*'
+                name="image"
+                buttonProps={{
+                  variant: 'light',
+                  compact: true,
+                }}
               />
             </div>
           </CreateLabel>
           <CreateLabel label='Описание вознаграждения'>
-            <TextInput
+            <Textarea
               value={reward.description}
               onChange={handleInput}
               name='description'
               style={{border: 'none'}}
+              classNames={{
+                input: 'h-48'
+              }}
               size='md'
-              // placeholder="Не более 50 символов"
+              placeholder='Описание вознаграждение'
               required
-              variant="unstyled"
+              variant='unstyled'
               py={6}
               px={16}
+              maxLength={500}
             />
             <div className={styles.restInfo}>
-              asdasd
+              Осталось {500 - (reward?.description.length! ?? 0)} символов
             </div>
           </CreateLabel>
           <CreateLabel label='Способы получения'>
             <Textarea
               classNames={{
                 error: styles.error,
-                input: 'h-64'
+                input: 'h-24'
               }}
               value={reward.how_to_get}
               onChange={handleInput}
@@ -142,12 +183,13 @@ function Rewards({project, id, rewards}: EditProjectProps) {
               py={6}
               px={16}
               size='md'
-              placeholder="Не более 50 символов"
+              placeholder='Как получить вашего вознаграждение'
               required
-              variant="unstyled"
+              variant='unstyled'
+              maxLength={240}
             />
             <div className={styles.restInfo}>
-              asdasd
+              Осталось {240 - (reward?.how_to_get.length! ?? 0)} символов
             </div>
           </CreateLabel>
           <CreateLabel label='Цена вознаграждения'>
@@ -183,7 +225,7 @@ function Rewards({project, id, rewards}: EditProjectProps) {
                   required
                   variant="unstyled"
                 />
-                {false && (
+                {infinite && (
                   <Overlay />
                 )}
               </div>
@@ -193,6 +235,7 @@ function Rewards({project, id, rewards}: EditProjectProps) {
                 label='Не ограничено'
                 classNames={{label: 'font-semibold'}}
                 className='flex-1 border-l border-slate-200'
+                onChange={handleInfinite}
               />
             </div>
           </CreateLabel>
@@ -201,9 +244,9 @@ function Rewards({project, id, rewards}: EditProjectProps) {
             className='border-b'
           >
             <DatePicker
-              // value={reward.sending}
-              // onChange={handleInput}
-              // name='sending'
+              value={reward.sending}
+              onChange={(e) => setReward({...reward, sending: e!})}
+              name='sending'
               classNames={{
                 error: styles.error,
               }}
@@ -224,7 +267,7 @@ function Rewards({project, id, rewards}: EditProjectProps) {
             </Button>
           </div>
         </div>
-        <div className={styles.bgWrapper}>
+        <div className='wrapper'>
           <div className='p-4 border border-slate-200 mb-4'>
             <span className='inline-block mb-4 text-lg font-medium'>
               Поддержать на любую сумму
@@ -235,13 +278,38 @@ function Rewards({project, id, rewards}: EditProjectProps) {
           </div>
           <div className='flex flex-col gap-y-4'>
             <Reward reward={reward}/>
-            {rewards?.map((item, i) => {
-              return <Reward reward={item} key={i}/>
+            {rewards?.reverse().map((item, i) => {
+              return (
+                <div className='relative'>
+                  <Reward reward={item} key={i} className='border-b-0'/>
+                  <div className='flex justify-end gap-x-4 border border-t-0 px-4 pb-4'>
+                    <Button
+                      compact
+                      size='sm'
+                      variant='subtle'
+                    >
+                      Редактировать
+                    </Button>
+                    <Button
+                      compact
+                      size='sm'
+                      variant='subtle'
+                      color='red'
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              )
             })}
           </div>
         </div>
       </div>
-      <CreateButtons back='/edit/details' forward='/edit/verification' />
+      <CreateButtons 
+        loading={loading.create} 
+        back='/edit/details' 
+        forward='/edit/verification' 
+      />
     </div>
   ) 
 }

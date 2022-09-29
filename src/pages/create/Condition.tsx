@@ -43,7 +43,7 @@ const rules = [
 
 
 const styles = {
-  wrapper: 'w-full py-10 sm:py-20 bg-white',
+  wrapper: 'w-full py-10 sm:py-20 bg-white border-y border-slate-200',
   inner: 'flex flex-col lg:flex-row',
   block: 'w-full flex flex-col gap-y-6 sm:gap-y-10 items-center py-6 sm:py-14 border border-green-400 bg-emerald-50 rounded-md px-3',
   block2: 'w-full flex flex-col gap-y-6 sm:gap-y-10 items-center py-6 sm:py-14 px-3',

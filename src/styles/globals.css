@@ -15,8 +15,6 @@ a {
 }
 
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
   body {
@@ -24,12 +22,18 @@ a {
   }
 }
 
+@tailwind components;
+@tailwind utilities;
+
 @layer components{
+  .wrapper {
+    @apply bg-white p-4 rounded-md border
+  }
   .link {
-    @apply hover:border-b hover:border-b-blue-500 text-blue-500 cursor-pointer transition-all duration-200
+    @apply hover:border-b hover:border-b-blue-400 text-blue-400 cursor-pointer transition-all duration-200
   }
   .light-link {
-    @apply hover:border-b hover:border-b-blue-500 hover:text-blue-500 cursor-pointer transition-all duration-200
+    @apply hover:border-b hover:border-b-blue-400 hover:text-blue-400 cursor-pointer transition-all duration-200
   }
 }
 
@@ -51,3 +55,5 @@ a {
 .incubator-child:nth-child(6n) {
   background-color: chartreuse;
 }
+
+@import './preflight.css';

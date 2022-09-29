@@ -1,9 +1,9 @@
 import React from 'react'
-import { EditProjectProps, styles } from '../../../pages/project/edit'
+import { EditProjectProps } from '../../../pages/project/edit'
 import { CreateButtons } from '../../../components'
 
 import cn from 'classnames'
-import { Button, Textarea, TextInput } from '@mantine/core'
+import { Button, Textarea } from '@mantine/core'
 
 const string = 
   `Lorem ipsum dolor sit amet consectetur 
@@ -20,7 +20,7 @@ function Incubator({project}: EditProjectProps) {
 
   return (
     <div>
-      <div className={styles.bgWrapper}>
+      <div className='wrapper'>
         <div className='grid grid-cols-[70%_30%] gap-x-4'>
           <div>
             <div className='grid grid-cols-6'>

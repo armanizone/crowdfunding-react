@@ -1,6 +1,6 @@
 import React from 'react'
 import { LoadingOverlay } from '@mantine/core'
-import { EditProjectProps, styles } from '../../../pages/project/edit'
+import { EditProjectProps } from '../../../pages/project/edit'
 
 import CreateLabel from '../../../components/CreateLabel'
 import CreateButtons from '../../../components/CreateButtons'
@@ -58,7 +58,7 @@ function Details({project, id}: EditProjectProps) {
 
   return (
     <div>
-      <div className={styles.bgWrapper}>
+      <div className='wrapper'>
         <LoadingOverlay visible={loading.save} /> 
         <CreateLabel
           label='Детальное описание'

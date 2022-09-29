@@ -8,7 +8,7 @@ export interface IReward {
   cost: number | null, 
   count: number | null,
   bought: number | null,
-  sending: Date | null,
+  sending: Date | string | null,
   uid?: string | null,
   created_at?: Date | string | null,
   updated_at?: Date | string | null,

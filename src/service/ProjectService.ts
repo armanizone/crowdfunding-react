@@ -1,6 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp, getDocs, query, collection, where } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { auth, db, storage } from '../utils/firebase';
+import { db } from '../utils/firebase';
 
 const createProject = async (id: string, data: object) => {
   return await setDoc(doc(db, 'projects', id), {

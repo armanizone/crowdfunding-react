@@ -1,0 +1,6 @@
+
+const theme = {
+
+}
+
+export { theme }

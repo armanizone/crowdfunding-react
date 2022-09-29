@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@mantine/core'
+import { Button } from '@mantine/core'
 import { Link } from 'react-router-dom'
 
 function Cover() {

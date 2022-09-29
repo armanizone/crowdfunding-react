@@ -1,9 +1,9 @@
 import React from 'react'
-import { LoadingOverlay, Select, Textarea, TextInput } from '@mantine/core'
+import { Button, LoadingOverlay, Select, Textarea, TextInput } from '@mantine/core'
 import { EditProjectProps, styles } from '../../../pages/project/edit'
 import { cities } from '../../../utils/db'
 
-import { CreateLabel, CreateButtons, Card} from '../../../components'
+import { CreateLabel, CreateButtons, Card, FileInput} from '../../../components'
 import ProjectService from '../../../service/ProjectService'
 import { getImage, uploadImage } from '../../../service/StorageService'
 
@@ -66,7 +66,7 @@ function Main({project, id}: EditProjectProps) {
   return (
     <div>
       <div className={styles.row}>
-        <div className={styles.bgWrapper}>
+        <div className='wrapper'>
           <LoadingOverlay visible={loading.save} />
           <CreateLabel 
             label='Название проекта' 
@@ -96,15 +96,44 @@ function Main({project, id}: EditProjectProps) {
             label='Изображение проекта' 
             tooltip='Рекомендуемое изображение (16:9)'
           >
-            <div className="flex items-center relative overflow-hidden h-32">
-              <input
-                type="file"
-                accept="image/*"
-                name="image"
-                className={styles.fileInput}
-                onChange={handleImage}
-                required
-              />
+            <div className='p-4 flex gap-4'>
+              {proj?.image && (
+                <img 
+                  src={proj?.image ?? project?.image} 
+                  alt="" 
+                  className='w-40 object-contain'
+                />
+              )}
+              <div className='flex flex-col items-start gap-4'>
+                {!proj?.image && (
+                  <FileInput
+                    label='Загрузить изображение'
+                    buttonProps={{
+                      compact: true,
+                      variant: 'light',
+                    }}
+                    accept='image/*'
+                    name='image'
+                    onChange={handleImage}
+                  />
+                )}
+                {proj?.image && (
+                  <Button 
+                    compact
+                    color={'red'}
+                    variant='subtle'
+                    classNames={{
+                      label: 'text-sm underline'
+                    }}
+                    onClick={() => {
+                      setImage(null)
+                      setProj({...proj, image: null})
+                    }}
+                  >
+                    Удалить
+                  </Button>
+                )}
+              </div>
             </div>
           </CreateLabel>
           <CreateLabel
@@ -185,13 +214,17 @@ function Main({project, id}: EditProjectProps) {
             />
           </CreateLabel>
         </div>
-        <div className={styles.bgWrapper}>
+        <div className='wrapper'>
           <Card 
             project={proj}
           />
         </div>
       </div>
-      <CreateButtons forward='/edit/details' callback={updateProject}/>
+      <CreateButtons 
+        loading={loading.save} 
+        forward='/edit/details' 
+        callback={updateProject}
+      />
     </div>
   )
 }

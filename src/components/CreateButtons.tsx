@@ -1,20 +1,22 @@
 import React from 'react'
 import { Button } from '@mantine/core'
 import { BsEye } from 'react-icons/bs'
-import { EditProjectContext, styles } from '../pages/project/edit'
+import { EditProjectContext } from '../pages/project/edit'
 interface CreateButtonsProps {
   back?: string,
   forward?: string,
   incubator?: boolean,
-  callback?: () => void
+  callback?: () => void,
+  loading?: boolean,
+  toModeration?: () => void
 }
 
-function CreateButtons({ back, forward, callback, incubator}: CreateButtonsProps) {
+function CreateButtons({ back, forward, callback, toModeration, incubator, loading}: CreateButtonsProps) {
 
   const { handleTabChange } = React.useContext(EditProjectContext)
 
   return (
-    <div className={`${styles.bgWrapper} flex items-center mt-4`}>
+    <div className={`wrapper flex items-center mt-4`}>
       {back && (
         <Button
           size='md'
@@ -35,6 +37,7 @@ function CreateButtons({ back, forward, callback, incubator}: CreateButtonsProps
           size='md'
           variant='light'
           onClick={callback}
+          loading={loading}
         >
           Сохранить
         </Button>
@@ -59,6 +62,7 @@ function CreateButtons({ back, forward, callback, incubator}: CreateButtonsProps
             :
               <Button
                 size='md'
+                onClick={toModeration}
               >
                 Отправить на модерацию
               </Button>

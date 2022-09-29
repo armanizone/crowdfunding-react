@@ -2,7 +2,9 @@ import React from 'react'
 
 function Explore() {
   return (
-    <div>All</div>
+    <div className='w-full'>
+      <div className="container"></div>
+    </div>
   )
 }
 

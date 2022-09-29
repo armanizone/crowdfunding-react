@@ -8,7 +8,7 @@ export interface IProject {
   id?: string | undefined | null,
   title?: string | null,
   description?: string | null,
-  image?: string | null,
+  image?: string | null | undefined,
   city?: string | null,
   goal?: number | null,
   category?: string | null,

@@ -3,13 +3,24 @@ import { Accordion as Acc } from '@mantine/core'
 
 function Accordion() {
   return (
-    <div className='bg-white rounded-md overflow-hidden'>
-      <Acc defaultValue='acc'>
-        <Acc.Item value='acc'>
-          <Acc.Control>Вопрос</Acc.Control>
-          <Acc.Panel>Ответ на вопрос</Acc.Panel>
-        </Acc.Item>
-      </Acc>
+    <div className='w-full'>
+      <h2 className='text-center text-2xl font-medium mb-8'>Часто-задаваемые вопросы</h2>
+      <div className='bg-white rounded-md overflow-hidden'>
+        <Acc defaultValue='acc'>
+          {Array(10).fill(1).map((e, i: number) => {
+            return (
+              <Acc.Item value={String(i)}>
+                <Acc.Control>
+                  Lorem ipsum dolor sit amet.
+                </Acc.Control>
+                <Acc.Panel>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque officiis aliquid veritatis obcaecati unde vero reiciendis autem vel, architecto dolore ipsum magnam voluptatem voluptatibus modi ad, labore inventore facilis!
+                </Acc.Panel>
+              </Acc.Item>
+            )
+          })}
+        </Acc>
+      </div>
     </div>
   )
 }

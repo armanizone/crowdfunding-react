@@ -21,14 +21,12 @@ export interface EditProjectProps {
 
 export const styles = {
   row: 'grid grid-cols-1 sm:grid-cols-[75%_auto] relative gap-4',
-  bgWrapper: 'bg-white p-4 rounded-md border border-slate-200',
   restInfo: 'absolute bottom-1 right-1 text-xs text-slate-400',
-  fileInput: 'file:px-4 my-auto file:h-[50px] file:cursor-pointer cursor-pointer file:ml-4 block w-full text-sm text-slate-500 file:mr-2 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-400 hover:file:bg-blue-100',
   textarea: 'max-h-[120px] overflow-hidden resize-y',
   addtionalField: 'p-4 grid-cols-1 sm:grid-cols-[275px_auto]',
   checkField: 'flex flex-col w-full',
   checkLabel: 'p-4',
-  error: 'px-4 pb-2 -mt-2 text-xs'
+  error: 'text-xs'
 }
 interface EditProjectContextProps {
   handleTabChange: (value: string | null) => void
@@ -94,7 +92,7 @@ function EditProject() {
   )
 
   return (
-    <div className='w-full my-10 box-border'>
+    <div className='w-full box-border'>
       <div className="container">
         <div className='w-full'>
           <EditProjectContext.Provider value={{handleTabChange}}>
@@ -105,7 +103,7 @@ function EditProject() {
               radius='md'
               classNames={{
                 tabLabel: 'text-xl',
-                tabsList: styles.bgWrapper
+                tabsList: 'wrapper'
               }}
             >
               <Tabs.List>

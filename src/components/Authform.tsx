@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, TextInput } from '@mantine/core'
+import { Button, PasswordInput, TextInput } from '@mantine/core'
 import useForm, { FormProps } from '../hooks/useForm'
 
 const styles = {
@@ -43,7 +43,7 @@ function Login ({setCurrent}: FormProps):JSX.Element {
         /> 
       </div>
       <div>
-        <TextInput
+        <PasswordInput
           name='password'
           value={values.password}
           onChange={handleInputChange}
@@ -109,7 +109,7 @@ function SignUp({ setCurrent }: FormProps): JSX.Element {
         />
       </div>
       <div>
-        <TextInput
+        <PasswordInput
           name='password'
           value={values.password}
           onChange={handleInputChange}
@@ -119,7 +119,7 @@ function SignUp({ setCurrent }: FormProps): JSX.Element {
         />
       </div>
       <div>
-        <TextInput
+        <PasswordInput
           name='password_confirmation'
           value={values.password_confirmation}
           onChange={handleInputChange}

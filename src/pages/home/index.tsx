@@ -15,7 +15,7 @@ const Home = () => {
       <div>
 
         <div className="container">
-          <div className='main-grid mt-4'>
+          <div className='main-grid'>
             <Cover/> 
             <Sidebar/>
             <Stats/>

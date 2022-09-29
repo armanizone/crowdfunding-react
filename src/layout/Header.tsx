@@ -16,7 +16,7 @@ import { useDispatch } from '../redux/store'
 import { Open } from '../redux/slices/authModalSlice'
 
 const styles = {
-  wrapper: 'w-full bg-white border border-slate-200 z-50 mb-4',
+  wrapper: 'w-full bg-white border border-slate-200 z-50 mb-8',
   inner: 'flex items-center justify-between py-4',
   nav: 'flex items-center gap-x-8',
   divider: 'border-l border-slate-100 h-8',
@@ -28,7 +28,7 @@ const styles = {
 
 function Header() {
 
-  const {user, loading} = useAuth()
+  const {user} = useAuth()
 
   const dispatch = useDispatch()
 
@@ -47,14 +47,13 @@ function Header() {
               transition='fade' 
               transitionDuration={200}
               zIndex={9999}
-            
             >
               <Menu.Target>
                 <Button 
                   unstyled 
                   className='light-link' 
                   component={Link} 
-                  to='/explore/all'
+                  to='/explore'
                 >
                   Проекты 
                 </Button>
@@ -119,11 +118,15 @@ function Header() {
               </div>
             </Link>
           <nav className={styles.nav}>
-            <span className='link'>
-              <Link to='/create'>
-                Создать проект
-              </Link>
-            </span>
+            <Button
+              compact
+              size='sm'
+              variant='subtle'
+              component={Link}
+              to='/create'
+            >
+              Создать проект
+            </Button>
             <div className={styles.divider}></div>
             {user ?
               <Menu 
@@ -133,7 +136,13 @@ function Header() {
                 transitionDuration={200}
               >
                 <Menu.Target>
-                  <Button unstyled className='link' component={Link} to='/profile'>
+                  <Button 
+                    component={Link} 
+                    to='/profile'
+                    size='sm'
+                    variant='subtle'
+                    compact
+                  >
                     Профиль
                   </Button>
                 </Menu.Target>
@@ -144,7 +153,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <RiTableAltLine className={`${styles.icon} text-pink-500`}/>
-                      <span className={styles.menuLink}>
+                      <span>
                         Созданные проекты
                       </span>
                     </p>
@@ -155,7 +164,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <MdSupport className={styles.icon}/>
-                      <span className={styles.menuLink}>
+                      <span>
                         Поддержанные проекты
                       </span>
                     </p>
@@ -166,7 +175,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <BiData className={styles.icon}/>
-                      <span className={styles.menuLink}>
+                      <span>
                         Мои заказы
                       </span>
                     </p>
@@ -177,7 +186,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <MdOutlineAccountBalanceWallet className={styles.icon} />
-                      <span className={styles.menuLink}>
+                      <span>
                         Баланс
                       </span>
                     </p>
@@ -188,7 +197,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <FiSettings className={styles.icon}/>
-                      <span className={styles.menuLink}>
+                      <span>
                         Настройки
                       </span>
                     </p>
@@ -198,7 +207,7 @@ function Header() {
                   >
                     <p className={styles.profileMenuLink}>
                       <GrPowerShutdown className={styles.icon}/>
-                      <span className={styles.menuLink}>
+                      <span>
                         Выход
                       </span>
                     </p>
@@ -206,9 +215,14 @@ function Header() {
                 </Menu.Dropdown>
               </Menu>
               :
-              <Button unstyled className='link' onClick={() => {
-                dispatch(Open())
-              }}>
+              <Button 
+                compact
+                size='sm'
+                variant='subtle'
+                onClick={() => {
+                  dispatch(Open())
+                }}
+              >
                 Вход
               </Button>
             }

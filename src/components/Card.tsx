@@ -12,39 +12,36 @@ interface CardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDiv
 }
 
 const styles = {
-  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden min-w-[270px] max-w-[270px] md:max-w-[350px] bg-white'
+  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden w-[297px] bg-white'
 }
 
 function Card({project, type, recomended, className, ...props}: CardProps): JSX.Element {
 
   return (
   <div 
-    className={cn(className, styles.wrapper, {
-    })}
+    className={cn(className, styles.wrapper)}
     {...props}
   >
-    <div className='relative overflow-hidden '>
-      {project?.image && (
+    <div className='relative overflow-hidden'>
+      {project?.image ? (
         <Link to={`/project/${project.id}`}>
           <img 
             src={project?.image}
             alt={project.image}
-            className='aspect-video object-fill z-50'
+            className='aspect-video object-cover z-50'
           />
         </Link>
-      )}
-      <div className='absolute aspect-video top-0 left-0 bottom-0 right-0 bg-white border-b border-slate-200 -z-10'></div>
+      ) : <div className='aspect-video object-cover z-50 bg-slate-200 border-b border-slate-200'></div>}
     </div>
     <div className='flex flex-col p-4 gap-y-3'>
       <h2 className='text-base font-semibold'>{project?.title}</h2>
       <p className='text-slate-500 text-[15px]'>{project?.description}</p>
     </div>
-    <div className='p-5 mt-3'>
+    <div className='p-5'>
       <div className="success_form">
         <div className="text-xs text-blue-400 mb-4">
           {project?.category}
         </div>
-
         <div className="flex justify-between items-end mb1">
           <div className="">
             <span className="text-sm mr-1.5">1375</span>
