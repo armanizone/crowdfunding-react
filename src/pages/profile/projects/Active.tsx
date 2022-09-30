@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading } from '../../../components'
+import { Heading, Pillar } from '../../../components'
 
 function Active({values = []}: any) {
 
@@ -8,6 +8,13 @@ function Active({values = []}: any) {
   return (
     <div className='w-full h-full relative'>
       <Heading title='Активные проекты' description='Ваши запушенные проекты' />
+      <div className='flex flex-col gap-y-4 mt-4'>
+        {values?.map((item: any) => { 
+          return (
+            <Pillar project={item} type='active' /> 
+          )
+        })}
+      </div>
     </div>
   )
 }

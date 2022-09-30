@@ -10,6 +10,7 @@ import { FaDraftingCompass, FaRocket, FaCalendarAlt } from 'react-icons/fa'
 import Active from './Active'
 import Closed from './Closed'
 import Draft from './Draft'
+import { IProject } from '../../../interfaces/project.interface'
 
 function MyProjects() {
 
@@ -17,15 +18,17 @@ function MyProjects() {
 
   const [values, loading, error] = useCollectionData(query(collection(db, 'projects'), where('uid', '==', user?.uid ?? ' ')))
 
-  const drafted = values?.filter((item) => {
+  const items = values as IProject[]
+
+  const drafted = items?.filter((item) => {
     return item.status === 'created'
   })
 
-  const active = values?.filter((item) => {
+  const active = items?.filter((item) => {
     return item.status === 'active'
   })
 
-  const closed = values?.filter((item) => {
+  const closed = items?.filter((item) => {
     return item.status === 'closed'
   })
 

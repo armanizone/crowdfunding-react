@@ -6,12 +6,12 @@ import { IReward } from '../../../interfaces/reward.interface';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Main from './Main';
 import Details from './Details';
-import Rewards from './Rewards';
+import Rewards from './Rewards/Rewards';
 import Verification from './Verification';
 
-import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
-import { collection, doc, query, where } from 'firebase/firestore';
-import { db } from '../../../utils/firebase';
+import { useCollectionData, useCollectionDataOnce, useDocument } from 'react-firebase-hooks/firestore';
+import { collection, doc, DocumentData, FirestoreDataConverter, query, QueryDocumentSnapshot, SnapshotOptions, where, WithFieldValue } from 'firebase/firestore';
+import { app, db, firebase } from '../../../utils/firebase';
 import Incubator from './Incubator';
 export interface EditProjectProps {
   project?: IProject,

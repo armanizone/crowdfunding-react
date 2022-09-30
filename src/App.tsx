@@ -1,5 +1,5 @@
 import React from 'react';
-import { createEmotionCache, MantineProvider, Modal } from '@mantine/core';
+import { MantineProvider, Modal } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals'
 import { NotificationsProvider } from '@mantine/notifications'
 import { Route, Routes } from 'react-router-dom';
@@ -23,7 +23,7 @@ import EditProject from './pages/project/edit';
 import Details from './pages/project/edit/Details';
 import Incubator from './pages/project/edit/Incubator';
 import Main from './pages/project/edit/Main';
-import Rewards from './pages/project/edit/Rewards';
+import Rewards from './pages/project/edit/Rewards/Rewards';
 import Verification from './pages/project/edit/Verification';
 import { useDispatch, useSelector } from './redux/store';
 import { Close } from './redux/slices/authModalSlice';
@@ -33,7 +33,6 @@ import Active from './pages/profile/projects/Active';
 import Closed from './pages/profile/projects/Closed';
 import UserData from './pages/profile/settings/UserData';
 import ChangePassword from './pages/profile/settings/ChangePassword';
-import { theme } from './utils/theme';
 
 function App() {
 

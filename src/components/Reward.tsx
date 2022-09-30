@@ -9,7 +9,8 @@ interface RewardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLD
 
 function Reward({reward, className, ...props}: RewardProps): JSX.Element {
 
-  const sending = dayjs(new Date()).locale('ru').format('DD/MM/YYYY')
+  const sending = dayjs(new Date()).locale('ru').format('MMMM D, YYYY')
+
   
   return (
     <div 
@@ -27,13 +28,13 @@ function Reward({reward, className, ...props}: RewardProps): JSX.Element {
       </div>
       <div className='flex flex-col mt-4 gap-y-4'>
         <h2 className='text-base font-semibold'>{reward?.title}</h2>
-        <p>{reward?.description}</p>
-        <div className='text-slate-500 text-[15px]'>
+        <p className='text-sm'>{reward?.description}</p>
+        <div className='text-slate-500 text-sm'>
           {reward?.how_to_get}
         </div>
         <div>
-          <p>Примерная дата доставки</p>
-          <p>{sending}</p>
+          <p className='text-slate-400 text-sm'>Примерная дата доставки</p>
+          <time className='text-sm'>{sending}</time>
         </div>
         <div className='flex justify-between'>
           <div>

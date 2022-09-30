@@ -23,7 +23,7 @@ function Main({project, id}: EditProjectProps) {
     setProj({ ...proj, image: URL.createObjectURL(e?.target?.files[0])})
   }
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string | null) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string) => {
     if (e.target) {
       const { name, value } = e.target
       if (parseInt(value)) return setProj({...proj, [name]: parseInt(value) })
@@ -33,7 +33,7 @@ function Main({project, id}: EditProjectProps) {
     setProj({...proj, [name]: val})
   }
 
-  const[loading, setLoading] = React.useState({
+  const [loading, setLoading] = React.useState({
     save: false,
   })
 

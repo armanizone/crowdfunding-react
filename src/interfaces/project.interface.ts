@@ -11,6 +11,7 @@ export interface IProject {
   image?: string | null | undefined,
   city?: string | null,
   goal?: number | null,
+  status?: string,
   category?: string | null,
   duration?: number | null,
   detail_description?: any | null,
@@ -23,6 +24,6 @@ export interface IProject {
   phone?: number | null,
   document_front?: File | null,
   document_back?: File | null,
-  created_at?: Date | string | null,
-  updated_at?: Date | string | null,
+  created_at?: any,
+  updated_at?: any,
 }

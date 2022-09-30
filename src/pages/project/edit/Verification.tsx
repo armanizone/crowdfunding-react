@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextInput } from '@mantine/core'
 import { EditProjectProps, styles } from '../../../pages/project/edit'
-import { CreateButtons, CreateLabel } from '../../../components'
+import { CreateButtons, CreateLabel, FileInput } from '../../../components'
 
 function Verification({project, id}: EditProjectProps) {
 
@@ -61,22 +61,20 @@ function Verification({project, id}: EditProjectProps) {
           />
         </CreateLabel>
         <CreateLabel label='Удостоверение личности' className='border-b'>
-          <div className='flex flex-col justify-center'>
-            <TextInput
-              type='file'
-              variant="unstyled"
-              className='flex-1'
-              px={16}
-              mt={8}
-              description='Лицевая сторона'
+          <div className='flex gap-x-4 items-center p-4'>
+            <FileInput 
+              label='Лицевая сторона'
+              buttonProps={{
+                compact: true, 
+                variant: 'outline',
+              }}
             />
-            <TextInput
-              type='file'
-              variant="unstyled"
-              className='flex-1'
-              px={16}
-              mt={8}
-              description='Обратная сторона'
+            <FileInput 
+              label='Обратная сторона'
+              buttonProps={{
+                compact: true, 
+                variant: 'outline',
+              }}
             />
           </div>
         </CreateLabel>
