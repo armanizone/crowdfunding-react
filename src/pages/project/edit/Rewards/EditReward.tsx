@@ -2,18 +2,24 @@ import React from 'react'
 import { Button, Checkbox, Modal, Overlay, Textarea, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { CreateLabel, FileInput } from '../../../../components'
-import { EditProjectProps, styles } from '../../../../pages/project/edit'
+import { styles } from '../../../../pages/project/edit'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../../utils/firebase'
+import { getImage, uploadImage } from '../../../../service/StorageService'
+import { useParams } from 'react-router-dom'
 
 
 function EditReward({editReward, editModal, setEditModal}: any) {
+
+  const { id } = useParams()
 
   React.useEffect(() => {
     setReward(editReward)
   }, [editReward])
 
   const [reward, setReward] = React.useState<any>(editReward)
+
+  const [loading, setLoading] = React.useState(false)
 
   const [infinite, setInfinite] = React.useState(false)
 
@@ -36,11 +42,33 @@ function EditReward({editReward, editModal, setEditModal}: any) {
     }
     setReward({ ...reward, [name]: val })
   }
-  console.log(reward);
-  
 
   const updateReward = async () => {
-    // await updateDoc(doc(db, 'rewards', reward))
+    setLoading(true)
+    if (image) {
+      await uploadImage(`projects/${id}/main-img`, image)
+      .then(() => {
+        getImage(`projects/${id}/main-img`)
+        .then(async e => {
+          await updateDoc(doc(db, 'rewards', reward.id), {
+            ...reward,
+            image: e
+          })
+        })
+      })
+      .finally(() => {
+        setLoading(false)
+        setEditModal(false)
+      })
+      return
+    }
+    await updateDoc(doc(db, 'rewards', reward.id), {
+      ...reward
+    }) 
+    .finally(() => {
+      setLoading(false)
+      setEditModal(false)
+    })
   }
 
   return (
@@ -221,10 +249,14 @@ function EditReward({editReward, editModal, setEditModal}: any) {
       <div className='flex items-center justify-between gap-x-4 mt-4'>
         <Button
           variant='outline'
+          loading={loading}
         >
           Отмена
         </Button>
-        <Button>
+        <Button 
+          onClick={updateReward}
+          loading={loading}
+        >
           Сохранить
         </Button>
       </div>

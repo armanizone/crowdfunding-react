@@ -11,8 +11,6 @@ import { openConfirmModal } from '@mantine/modals'
 import { deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
 
-
-
 interface PillarProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   project: IProject,
   type?: 'draft' | 'active' | 'closed',
@@ -28,8 +26,6 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
 
   const deleteTrack = async () => await deleteDoc(doc(db, 'projects', project?.id as string))
   
-
-
   const confirmDeleteModal = () => openConfirmModal({
     title: 'Подтверждение действия',
     children: (
@@ -63,19 +59,22 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
           {isClosed && (
             <Tag title='Завершен' type='closed' />
           )}
-          <Button
-            variant='subtle'
-            compact
-            classNames={{
-              label: 'underline',
-              leftIcon: 'text-lg'
-            }}
-            leftIcon={<FiEdit />}
-            component={Link}
-            to={`/project/${project?.id}/edit`}
-          >
-            Редактировать
-          </Button>
+
+          {!isClosed && (
+            <Button
+              variant='subtle'
+              compact
+              classNames={{
+                label: 'underline',
+                leftIcon: 'text-lg'
+              }}
+              leftIcon={<FiEdit />}
+              component={Link}
+              to={`/project/${project?.id}/edit`}
+            >
+              Редактировать
+            </Button>
+          )}
           {project?.status !== 'confirmed' ?
             <Button
               color={'red'}

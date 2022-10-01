@@ -2,15 +2,19 @@ import React from 'react'
 
 import { EditProjectProps, styles } from '../../../../pages/project/edit'
 import { CreateLabel, Reward, CreateButtons, FileInput } from '../../../../components'
-import { Button, Checkbox, LoadingOverlay, Modal, Overlay, Textarea, TextInput } from '@mantine/core'
+import { Button, Checkbox, LoadingOverlay, Overlay, Textarea, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates';
 import RewardService from '../../../../service/RewardService'
 import { getImage, uploadImage } from '../../../../service/StorageService'
+import { useForceUpdate, randomId } from '@mantine/hooks'
 import EditReward from './EditReward';
+import ProjectService from '../../../../service/ProjectService';
 
 
 function Rewards({project, id, rewards}: EditProjectProps) {
-  
+
+  const forceUpdate = useForceUpdate()
+
   const [image, setImage] = React.useState<File | null>(null)
 
   const [loading, setLoading] = React.useState({
@@ -52,21 +56,23 @@ function Rewards({project, id, rewards}: EditProjectProps) {
     setReward({...reward, [name]: val })
   }
 
+  const rewardId = `${id}-${randomId().slice(8)}`
+
   const createReward = async () => {
     handleLoading('create', true)
-    const rewardId = (new Date().getTime() / 1000).toString().split('.').join('')
     if (image) {
-      await uploadImage(`/rewards/r-${rewardId}/main-img`, image!)
+      await uploadImage(`/rewards/${rewardId}/main-img`, image!)
       .then(() => {
-        getImage(`/rewards/r-${rewardId}/main-img`)
+        getImage(`/rewards/${rewardId}/main-img`)
         .then(async e => {
-          RewardService.createReward(id as string, {
+          RewardService.createReward(rewardId as string, {
             ...reward, 
             uid: project?.uid,
             project_id: id,
-            image: e
+            image: e,
+            id: rewardId,
           })
-          .then(e => {
+          .then(async e => {
             setReward({
               title: '',
               description: '',
@@ -77,21 +83,25 @@ function Rewards({project, id, rewards}: EditProjectProps) {
               bought: 0,
               sending: new Date(),
             })
+            await ProjectService.updateProject(id as string, {
+              rewards: rewards?.length! + 1 ?? 0,
+            })
           })
         })
       })
       .finally(() => {
-          handleLoading('create', false)
+        handleLoading('create', false)
       })
       return
     }
-    RewardService.createReward(id as string, {
+    RewardService.createReward(rewardId as string, {
       ...reward,
       uid: project?.uid,
       project_id: id,
-      image: null
+      image: null,
+      id: rewardId,
     })
-    .then(e => {
+    .then(async e => {
       setReward({
         title: '',
         description: '',
@@ -102,6 +112,12 @@ function Rewards({project, id, rewards}: EditProjectProps) {
         bought: 0,
         sending: new Date(),
       })
+      await ProjectService.updateProject(id as string, {
+        rewards: rewards?.length! + 1 ?? 0,
+      })
+    })
+    .finally(() => {
+      handleLoading('create', false)
     })
   }
 
@@ -320,11 +336,11 @@ function Rewards({project, id, rewards}: EditProjectProps) {
           forward='/edit/verification' 
         />
       </div>
-      {/* <EditReward 
+      <EditReward 
         editReward={editReward} 
         editModal={editModal} 
         setEditModal={setEditModal} 
-      /> */}
+      />
     </>
   ) 
 }

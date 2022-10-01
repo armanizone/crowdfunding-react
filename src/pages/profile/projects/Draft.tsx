@@ -1,18 +1,17 @@
 import React from 'react'
-import useAuth from '../../../hooks/useAuth'
-import { Heading, Pillar } from '../../../components'
+import { Heading, Load, Pillar } from '../../../components'
 
-function Draft({values = []}: any) {
+function Draft({values = [], loading}: any) {
 
-  const { user } = useAuth()
+  if (loading) return <Load/>
 
   return (
     <div className='w-full h-full relative'>
       <Heading title='Черновики' description='Черновики ваших проектов' />
       <div className='flex flex-col gap-y-8 mt-4'>
-        {values?.map((project: any) => {
+        {values?.map((item: any) => {
           return (
-            <Pillar project={project} type='draft' />
+            <Pillar project={item} type='draft' key={item.id} />
           )
         })}
       </div>

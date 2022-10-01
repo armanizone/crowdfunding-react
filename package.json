@@ -60,6 +60,7 @@
     "@types/react-icons": "^3.0.0",
     "@types/react-redux": "^7.1.24",
     "autoprefixer": "^10.4.9",
+    "compressorjs": "^1.1.1",
     "dayjs": "^1.11.5",
     "embla-carousel-react": "^7.0.2",
     "firebase": "^9.9.4",

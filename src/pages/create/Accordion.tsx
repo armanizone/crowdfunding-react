@@ -9,7 +9,7 @@ function Accordion() {
         <Acc defaultValue='acc'>
           {Array(10).fill(1).map((e, i: number) => {
             return (
-              <Acc.Item value={String(i)}>
+              <Acc.Item value={String(i)} key={i}>
                 <Acc.Control>
                   Lorem ipsum dolor sit amet.
                 </Acc.Control>

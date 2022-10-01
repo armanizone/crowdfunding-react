@@ -9,14 +9,17 @@ import Details from './Details';
 import Rewards from './Rewards/Rewards';
 import Verification from './Verification';
 
-import { useCollectionData, useCollectionDataOnce, useDocument } from 'react-firebase-hooks/firestore';
-import { collection, doc, DocumentData, FirestoreDataConverter, query, QueryDocumentSnapshot, SnapshotOptions, where, WithFieldValue } from 'firebase/firestore';
-import { app, db, firebase } from '../../../utils/firebase';
+import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
+import { collection, doc, query, where } from 'firebase/firestore';
+import { db } from '../../../utils/firebase';
 import Incubator from './Incubator';
 export interface EditProjectProps {
   project?: IProject,
   id?: string | null, 
-  rewards?: IReward[]
+  details?: string,
+  loadin?: boolean,
+  rewards?: IReward[],
+  rewardsCount?: number 
 }
 
 export const styles = {
@@ -59,6 +62,7 @@ function EditProject() {
   }, [pData, pLoading, pError])
 
   React.useEffect(() => {
+    // getRewards()
     setRewards(rData)
   }, [rData, rLoading, rError])
 
@@ -83,6 +87,7 @@ function EditProject() {
     
   React.useEffect(() => {
     checkAuthor()
+    // eslint-disable-next-line
   }, [project, user]) 
 
   if (pLoading || rLoading) return (
@@ -117,12 +122,14 @@ function EditProject() {
                 <Main
                   project={project}
                   id={id as string}
+                  rewardsCount={rewards?.length}
                 />
               </Tabs.Panel>
               <Tabs.Panel value='/edit/details' pt='md'>
                 <Details
-                  project={project}
+                  details={pData?.data()?.detail_description}
                   id={id as string}
+                  loadin={pLoading}
                 />
               </Tabs.Panel>
               <Tabs.Panel value='/edit/rewards' pt='md'>

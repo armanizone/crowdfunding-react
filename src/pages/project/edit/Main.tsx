@@ -6,8 +6,9 @@ import { cities } from '../../../utils/db'
 import { CreateLabel, CreateButtons, Card, FileInput} from '../../../components'
 import ProjectService from '../../../service/ProjectService'
 import { getImage, uploadImage } from '../../../service/StorageService'
+import Compressor from 'compressorjs'
 
-function Main({project, id}: EditProjectProps) {
+function Main({project, id, rewardsCount}: EditProjectProps) {
 
   const [proj, setProj] = React.useState(project)
   
@@ -44,16 +45,21 @@ function Main({project, id}: EditProjectProps) {
   const updateProject = async () => {
     handleLoading('save', true)
     if (image) {
-      await uploadImage(`projects/${id}/main-img`, image)
-      .then(() => {
-        getImage(`projects/${id}/main-img`)
-        .then(async e => {
-          await ProjectService.updateProject(id as string, {
-            ...proj,
-            image: e
+      new Compressor (image, {  
+        quality: 0.6, 
+        async success(file) {          
+          await uploadImage(`projects/${id}/main-img`, file)
+          .then(() => {
+            getImage(`projects/${id}/main-img`)
+            .then(async e => {
+              await ProjectService.updateProject(id as string, {
+                ...proj,
+                image: e
+              })
+            })
+            .finally(() => handleLoading('save', false))
           })
-        })
-        .finally(() => handleLoading('save', false))
+        },
       })
       return
     } 
@@ -62,7 +68,6 @@ function Main({project, id}: EditProjectProps) {
     })
     .finally(() => handleLoading('save', false))
   }
-
   return (
     <div>
       <div className={styles.row}>

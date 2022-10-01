@@ -1,13 +1,20 @@
 import React from 'react'
-import { Heading } from '../../../components'
+import { Heading, Load, Pillar } from '../../../components'
 
-function Closed({values = []}: any) {
+function Closed({values = [], loading}: any) {
 
-  console.log(values, 'closed');
+  if (loading) return <Load />
 
   return (
     <div className='w-full h-full relative'>
       <Heading title='Завершенные проекты' description='Ваши завершенные проекты' />
+      <div className='flex flex-col gap-y-4 mt-4'>
+        {values?.map((item: any) => {
+          return (
+            <Pillar project={item} type='closed' key={item.id} />
+          )
+        })}
+      </div>
     </div>
   )
 }

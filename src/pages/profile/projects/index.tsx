@@ -1,5 +1,5 @@
 import React from 'react'
-import { Loader, Tabs } from '@mantine/core'
+import { Tabs } from '@mantine/core'
 import { collection, query, where } from 'firebase/firestore'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ function MyProjects() {
 
   const {user} = useAuth()
 
-  const [values, loading, error] = useCollectionData(query(collection(db, 'projects'), where('uid', '==', user?.uid ?? ' ')))
+  const [values, loading] = useCollectionData(query(collection(db, 'projects'), where('uid', '==', user?.uid ?? ' ')))
 
   const items = values as IProject[]
 
@@ -42,12 +42,6 @@ function MyProjects() {
   const handleTabChange = (value: string | null) => {
     navigate(`/profile/${value}`)
   }
-  
-  if (loading) return (
-    <div className='w-full h-full flex justify-center items-center'>
-      <Loader size='lg' />
-    </div>
-  )
 
   return (
     <div className='w-full'>
@@ -68,13 +62,13 @@ function MyProjects() {
             <Tabs.Tab value='projects/closed' icon={<FaCalendarAlt/>}></Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value='projects' p='xl' className='bg-white'>
-            <Draft values={drafted} />
+            <Draft values={drafted} loading={loading} />
           </Tabs.Panel>
           <Tabs.Panel value='projects/active' p='xl' className='bg-white'>
-            <Active values={active} />
+            <Active values={active} loading={loading} />
           </Tabs.Panel>
           <Tabs.Panel value='projects/closed' p='xl' className='bg-white'>
-            <Closed values={closed} />
+            <Closed values={closed} loading={loading} />
           </Tabs.Panel>
         </Tabs>
       </div>
