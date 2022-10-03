@@ -11,22 +11,22 @@ import { getImage, uploadImage } from '../../../service/StorageService'
 import { randomId } from '@mantine/hooks'
 import Compressor from 'compressorjs';
 
-function Details({details, id}: EditProjectProps) {
-  
+function Details({ details, id }: EditProjectProps) {
+
   const [value, setValue] = React.useState(details ?? '<p></p>');
 
   React.useLayoutEffect(() => {
     setValue(details as string)
-  }, [details])  
+  }, [details])
 
-  const [loading, setLoading] = React.useState({ 
-    layout: false, 
+  const [loading, setLoading] = React.useState({
+    layout: false,
     save: false,
-  }) 
+  })
 
   const handleLoading = (name: string, value: boolean) => {
     setLoading({ ...loading, [name]: value })
-  }  
+  }
 
   const randomid = randomId()
 
@@ -35,39 +35,39 @@ function Details({details, id}: EditProjectProps) {
       handleLoading('save', true)
       const formData = new FormData();
       formData.append('image', file);
-      new Compressor (file, {
+      new Compressor(file, {
         quality: 0.6,
-        async success(file) {           
+        async success(file) {
           await uploadImage(`/projects/${id}/details-img-${randomid}`, file)
-          .then(async e => {
-            console.log(e);
-            await getImage(`/projects/${id}/details-img-${randomid}`)
-            .then(e => {
-              resolve(e)
-              handleLoading('save', false)
+            .then(async e => {
+              console.log(e);
+              await getImage(`/projects/${id}/details-img-${randomid}`)
+                .then(e => {
+                  resolve(e)
+                  handleLoading('save', false)
+                })
+                .catch(() => reject(new Error('Upload failed')));
             })
-            .catch(() => reject(new Error('Upload failed')));
-          })
         },
       })
       // eslint-disable-next-line
-  }), [details]);
+    }), [details]);
 
   const updateProject = async () => {
     handleLoading('save', true)
     ProjectService.updateProject(id as string, {
       detail_description: value
     })
-    .then(e => {
-      console.log(e);
-    })
-    .catch(e => {
-      console.log(e);
-    })
-    .finally(() => handleLoading('save', false))
+      .then(e => {
+        console.log(e);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+      .finally(() => handleLoading('save', false))
   }
 
-  return ( 
+  return (
     <div className=''>
       <LoadingOverlay visible={loading.save} />
       <div className='wrapper'>
@@ -79,13 +79,13 @@ function Details({details, id}: EditProjectProps) {
           Избегайте монотонности изложения, разбивайте текст на абзацы с привлекательными заголовками,
           фото- и видеоматериалами, графическими изображениями и т.п. Совет: по объему текст-описание 
           должен быть примерно наравне с колонкой вознаграждений – идеально, если они заканчиваются на одном уровне.`
-        }
+          }
           className='border-b'
         >
           <RichTextEditor
-            value={value} 
-            onChange={setValue} 
-            style={{border: 'none'}}
+            value={value}
+            onChange={setValue}
+            style={{ border: 'none' }}
             className='max-w-[700px] mx-auto'
             onImageUpload={handleImageUpload}
           />

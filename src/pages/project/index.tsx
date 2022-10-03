@@ -1,12 +1,11 @@
-import { Loader } from '@mantine/core'
-import { collection, doc, query, where } from 'firebase/firestore'
 import React from 'react'
+import { collection, doc, query, where } from 'firebase/firestore'
+import { Load } from '../../components'
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore'
 import { db } from '../../utils/firebase'
 import ProjectFee from './ProjectFee'
 import ProjectHead from './ProjectHead'
 import ProjectMain from './ProjectMain'
-
 
 const styles = {
   project: 'w-full my-6',
@@ -20,11 +19,7 @@ function Project() {
   const [value, loadjng] = useDocumentData(doc(db, 'projects', '1663083353437'))
   const [values] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', value?.id ?? ' ')))
 
-  if (loadjng) return (
-    <div className='w-full h-full flex justify-center items-center'>
-      <Loader size='lg' />
-    </div>
-  )
+  if (loadjng) return <Load/>
 
   return (
     <div className={styles.project}>

@@ -16,9 +16,7 @@ import { useDispatch } from '../redux/store'
 import { Open } from '../redux/slices/authModalSlice'
 
 const styles = {
-  wrapper: 'w-full bg-white border border-slate-200 z-50 mb-8',
-  inner: 'flex items-center justify-between py-4',
-  nav: 'flex items-center gap-x-8',
+  nav: 'flex items-center gap-x-4 lg:gap-x-8',
   divider: 'border-l border-slate-100 h-8',
   menu: 'flex flex-col px-4 text-sm whitespace-nowrap divide-y divide-solid',
   menuLink: 'light-link',
@@ -32,14 +30,13 @@ function Header() {
 
   const dispatch = useDispatch()
 
-  const signout = () => {
-    UserService.signout()
-  }
+  const signout = () => UserService.signout()
 
   return (
-    <div className={styles.wrapper}>
+    <div className='w-full bg-white border border-slate-200 z-50 mb-8'>
       <div className='container'>
-        <div className={styles.inner}>
+        
+        <div className='flex items-center justify-between py-4'>
           <nav className={styles.nav}>
             <Menu 
               trigger='hover' 
