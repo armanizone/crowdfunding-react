@@ -12,6 +12,7 @@ export interface IReward {
   uid?: string | null,
   created_at?: Date | string | null,
   updated_at?: Date | string | null,
+  id?: string | null
 }
 
 

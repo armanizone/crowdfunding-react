@@ -4,6 +4,7 @@ import Load from './Load';
 import Pillar from './Pillar';
 import Reward from './Reward';
 import Heading from './Heading'
+import UserBar from './UserBar';
 import Authform from './Authform';
 import FileInput from './FileField';
 import CreateLabel from './CreateLabel';
@@ -16,6 +17,7 @@ export {
   Pillar,
   Reward,
   Heading,
+  UserBar,
   Authform,
   FileInput,
   CreateLabel,

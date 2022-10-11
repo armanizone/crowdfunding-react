@@ -39,27 +39,26 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
   return (
     <div
       key={project?.id}
-      className={(cn(className, 'flex bg-white border border-slate-200'))}
+      className={(cn(className, 'flex flex-col sm:flex-row bg-white border border-slate-200'))}
       {...props}
     >
       <div className=''>
         {project?.image
-          ? <img src={project?.image} className='aspect-video w-[370px] h-full object-cover' alt="" />
-          : <div className='aspect-video w-[370px] h-full object-cover bg-slate-200'></div>
+          ? <img src={project?.image} className='aspect-video sm:w-72 lg:w-[370px] h-full object-cover' alt="" />
+          : <div className='aspect-video sm:w-72 lg:w-[370px] h-full object-cover bg-slate-200'></div>
         }
       </div>
-      <div className='p-4 flex-1 flex flex-col justify-between gap-y-4'>
-        <div className='flex gap-x-4'>
+      <div className='p-3 md:p-4 flex-1 flex flex-col justify-between gap-y-4'>
+        <div className='flex flex-col md:flex-row gap-y-4 items-start gap-x-4'>
           {isDraft && (
-            <Tag title='Черновик' type='draft' />
+            <Tag title='Черновик' type='draft'/>
           )}
           {isActive && (
-            <Tag title='Идет сбор' type='active' />
+            <Tag title='Идет сбор' type='active'/>
           )}
           {isClosed && (
-            <Tag title='Завершен' type='closed' />
+            <Tag title='Завершен' type='closed'/>
           )}
-
           {!isClosed && (
             <Button
               variant='subtle'
@@ -71,6 +70,7 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
               leftIcon={<FiEdit />}
               component={Link}
               to={`/project/${project?.id}/edit`}
+              px={0}
             >
               Редактировать
             </Button>
@@ -86,6 +86,7 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
               }}
               leftIcon={<RiDeleteBin6Fill />}
               onClick={confirmDeleteModal}
+              px={0}
             >
               Удалить
             </Button>
@@ -115,22 +116,22 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
             </time>
           </div>
         </div>
-        <div className='flex justify-between items-center'>
-          <div>
-            <p className='font-light text-sm uppercase tracking-wide'>Вознаграждений</p>
-            <p className='font-bold text-xl text-center'>{project?.backed}</p>
+        <div className='grid grid-cols-2 lg:grid-cols-4 justify-between items-center gap-4'>
+          <div className='shadow p-2'>
+            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Вознаграждений</p>
+            <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
-          <div>
-            <p className='font-light text-sm uppercase tracking-wide'>Собрано</p>
-            <p className='font-bold text-xl text-center'>{project?.backed}</p>
+          <div className='shadow p-2'>
+            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Собрано</p>
+            <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
-          <div>
-            <p className='font-light text-sm uppercase tracking-wide'>Приобретено</p>
-            <p className='font-bold text-xl text-center'>{project?.backed}</p>
+          <div className='shadow p-2'>
+            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Приобретено</p>
+            <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
-          <div>
-            <p className='font-light text-sm uppercase tracking-wide'>Комментариев</p>
-            <p className='font-bold text-xl text-center'>{project?.backed}</p>
+          <div className='shadow p-2'>
+            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Комментариев</p>
+            <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
         </div>
       </div>

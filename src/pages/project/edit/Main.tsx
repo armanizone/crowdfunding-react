@@ -8,7 +8,7 @@ import ProjectService from '../../../service/ProjectService'
 import { getImage, uploadImage } from '../../../service/StorageService'
 import Compressor from 'compressorjs'
 
-function Main({project, id, rewardsCount}: EditProjectProps) {
+function Main({project, id}: EditProjectProps) {
 
   const [proj, setProj] = React.useState(project)
   

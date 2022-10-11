@@ -15,7 +15,7 @@ function Tag({title = 'Черновик', type, className, ...props}: TagProps):
 
   return (
     <div 
-      className={cn(className, 'h-min border-l-8 rounded', {
+      className={cn(className, 'h-min border-l-8 rounded inline-block', {
         'bg-sky-100 border-l-sky-500': isDraft ,
         'bg-green-100 border-l-green-500': isActive ,
         'bg-gray-100 border-l-gray-400': isClosed

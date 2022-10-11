@@ -1,7 +1,10 @@
+import { updateProfile } from 'firebase/auth'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import React from 'react'
 import { Close } from '../redux/slices/authModalSlice'
 import { useDispatch } from '../redux/store'
 import UserService from '../service/UserService'
+import { db } from '../utils/firebase'
 import { loginSchema, merged } from "../utils/validation"
 
 
@@ -76,7 +79,15 @@ export default function useForm() {
       merged.validate(values, { abortEarly: false })
       .then(e => {
         UserService.signup(values.email, values.password)
-        .then(e => {
+        .then(async e => {
+          await updateProfile(e.user, {
+            displayName: values.name
+          })
+          await setDoc(doc(db, 'users', e.user.email!), {
+            displayName: values.name,
+            email: values.email, 
+            created_at: serverTimestamp()
+          })
           UserService.sendEmail(e.user)
           .then(() => {
             setLoading(false)
@@ -149,7 +160,6 @@ export default function useForm() {
     },
     singout: (event: FormChangeEvent) => {
       event.preventDefault();
-      
     }
   }
 

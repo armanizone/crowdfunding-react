@@ -5,8 +5,13 @@ import { CreateButtons, CreateLabel, FileInput } from '../../../components'
 
 function Verification({project, id}: EditProjectProps) {
 
-  const toModaration = () => {
-    console.log('sended');
+  const [verification, setVerification] = React.useState({
+    name: '',
+    phone: '',
+    iin: '',
+  })
+
+  const toModeration = () => {
   }
 
   return (
@@ -79,7 +84,7 @@ function Verification({project, id}: EditProjectProps) {
           </div>
         </CreateLabel>
       </div>
-      <CreateButtons back='/edit/rewards' />
+      <CreateButtons back='/edit/rewards' toModeration={toModeration} />
     </div>
   )
 }

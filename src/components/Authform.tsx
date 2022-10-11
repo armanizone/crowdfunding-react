@@ -4,7 +4,7 @@ import useForm, { FormProps } from '../hooks/useForm'
 
 const styles = {
   form: 'flex flex-col gap-y-4 w-[minmax(290px_350px)]',
-  error: 'text-red-500 text-sm',
+  error: 'text-red-500 text-sm mt-4',
   input: 'w-full rounded-md',
 }
 
@@ -35,6 +35,7 @@ function Login ({setCurrent}: FormProps):JSX.Element {
       <div>
         <TextInput
           name='email'
+          type='email'
           value={values.email}
           onChange={handleInputChange}
           placeholder='Ваш email'

@@ -6,14 +6,17 @@ import { Button, Checkbox, LoadingOverlay, Overlay, Textarea, TextInput } from '
 import { DatePicker } from '@mantine/dates';
 import RewardService from '../../../../service/RewardService'
 import { getImage, uploadImage } from '../../../../service/StorageService'
-import { useForceUpdate, randomId } from '@mantine/hooks'
+import { randomId } from '@mantine/hooks'
 import EditReward from './EditReward';
 import ProjectService from '../../../../service/ProjectService';
+import { IReward } from '../../../../interfaces/reward.interface';
+import { openConfirmModal } from '@mantine/modals';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../../../../utils/firebase';
+import { showNotification } from '@mantine/notifications';
 
 
-function Rewards({project, id, rewards}: EditProjectProps) {
-
-  const forceUpdate = useForceUpdate()
+function Rewards({project, id, rewards = []}: EditProjectProps) {
 
   const [image, setImage] = React.useState<File | null>(null)
 
@@ -41,7 +44,7 @@ function Rewards({project, id, rewards}: EditProjectProps) {
     bought: 0,
     sending: new Date(),
   })
-
+  
   const [infinite, setInfinite] = React.useState(false)
 
   const handleInfinite = () => setInfinite(q => !q)
@@ -86,6 +89,12 @@ function Rewards({project, id, rewards}: EditProjectProps) {
             await ProjectService.updateProject(id as string, {
               rewards: rewards?.length! + 1 ?? 0,
             })
+            showNotification({
+              title: 'Вознаграждение',
+              message: 'Вознаграждение успешно создано!',
+              color: 'green',
+              autoClose: 3000
+            })
           })
         })
       })
@@ -115,6 +124,12 @@ function Rewards({project, id, rewards}: EditProjectProps) {
       await ProjectService.updateProject(id as string, {
         rewards: rewards?.length! + 1 ?? 0,
       })
+      showNotification({
+        title: 'Вознаграждение',
+        message: 'Вознаграждение успешно создано!',
+        color: 'green',
+        autoClose: 3000
+      })  
     })
     .finally(() => {
       handleLoading('create', false)
@@ -138,6 +153,41 @@ function Rewards({project, id, rewards}: EditProjectProps) {
     setEditReward(reward)
     setEditModal(true)
   }
+
+  const deleteReward = async (id: string) => {
+    await deleteDoc(doc(db, 'rewards', id))
+    .then(e => {
+      console.log(e);
+      showNotification({
+        title: 'Вознаграждение', 
+        message: 'Вознаграждение успешно удалено!',
+        color: 'green'
+      })
+    })
+    .catch(e => {
+      console.log(e);
+      showNotification({
+        title: 'Вознаграждение',
+        message: 'Не удалось удалить вознаграждение',
+        color: 'red'
+      })
+    })
+  }
+
+  const confirmDelete = (id: string) => openConfirmModal({
+    title: 'Подтверждение действия',
+    centered: true, 
+    children: (
+      <p>Вы действительно хотите удалить вознаграждение</p>
+    ),
+    labels: { confirm: 'Удалить', cancel: 'Отмена'},
+    confirmProps: {
+      color: 'red'
+    },
+    onConfirm: () => deleteReward(id)
+  })
+    
+  
 
   return (
     <>
@@ -320,7 +370,7 @@ function Rewards({project, id, rewards}: EditProjectProps) {
                       <Button compact size='sm' variant='subtle' onClick={() => handleRewardEdit(item)}>
                         Редактировать
                       </Button>
-                      <Button compact size='sm' variant='subtle' color='red'>
+                      <Button compact size='sm' variant='subtle' color='red' onClick={() => confirmDelete(item?.id!)}>
                         Удалить
                       </Button>
                     </div>

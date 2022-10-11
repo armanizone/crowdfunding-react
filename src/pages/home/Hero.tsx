@@ -4,9 +4,8 @@ import heroImg from '../../assets/images/hero.png'
 import { Open } from '../../redux/slices/authModalSlice'
 import { useDispatch } from '../../redux/store'
 
-function Hero() {
-
-
+function Hero(): JSX.Element {
+  
   const dispatch = useDispatch()
   const open = () => dispatch(Open())
 
@@ -20,23 +19,23 @@ function Hero() {
           </div>
           <main className="mx-auto mt-10 max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
             <div className="sm:text-center lg:text-left">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-5xl">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
                 <span >Краудфандинговая </span>
-                <span className="text-blue-600">платформа</span>
+                <span className="text-blue-500">платформа</span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mx-auto sm:mt-5 sm:max-w-xl sm:text-lg md:mt-5 md:text-xl lg:mx-0">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam ut tenetur pariatur provident nostrum recusandae asperiores placeat, corrupti nihil et.
               </p>
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <Link to="/create" className="flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 md:py-4 md:px-10 md:text-lg">
+                  <Link to="/create" className="flex w-full items-center justify-center rounded-md border border-transparent bg-blue-500 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 md:py-4 md:px-10 md:text-lg">
                     Создать проект
                   </Link>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <span onClick={open} className="flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-3 text-base font-medium text-blue-700 hover:bg-indigo-200 md:py-4 md:px-10 md:text-lg">
                     Войти
-                  </span>
+                  </span> 
                 </div>
               </div>
             </div>

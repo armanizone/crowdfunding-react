@@ -29,3 +29,16 @@
 .courses-grid {
   display: grid;
 }
+
+
+@media (max-width: 978px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      'cover'
+      'sidebar'
+      'courses'
+      'stats'
+    ;
+  }
+}

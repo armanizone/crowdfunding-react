@@ -23,7 +23,7 @@ function ProjectHead({project}: any) {
   return (
     <div className={styles.head}>
       <div className={styles.left}>
-        <img src={project?.image} className={styles.img} />
+        <img src={project?.image} className={styles.img} alt=''/>
         <div className={styles.categories}>
           <span className={styles.categoryLabel}>{project?.category}</span>
           <span className={styles.categoryLabel}>{project?.city}</span>

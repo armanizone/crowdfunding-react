@@ -6,7 +6,7 @@ import { Card } from '../../components'
 import { db } from '../../utils/firebase'
 
 const styles = {
-  container: 'grid grid-cols-4 gap-4',
+  container: 'grid grid-cols-2 lg:grid-cols-4 gap-4',
   box: 'border border-slate-200 h-72 rounded-md relative bg-white p-4 cursor-pointer',
   boxInner: 'w-full h-full flex justify-center items-center text-2xl underline'
 }
@@ -40,7 +40,7 @@ function Courses() {
             </p>
           </div>
         </div>
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
           <Link to='/about/projects'>
             <div className={styles.box}>
               <span className='absolute left-1/2 -translate-x-1/2 top-4 text-2xl'>
@@ -72,13 +72,14 @@ function Courses() {
             </div>
           </Link>
         </div>
-        <div className={styles.container}>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
           {Array(4).fill(value).map((item, i) => {
             return (
-              <Card
-                key={i}
-                project={item}
-              />
+              <div className='mx-auto' key={i}>
+                <Card
+                  project={item}
+                />
+              </div>
             )
           })}
         </div>

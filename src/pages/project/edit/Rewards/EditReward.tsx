@@ -250,6 +250,7 @@ function EditReward({editReward, editModal, setEditModal}: any) {
         <Button
           variant='outline'
           loading={loading}
+          onClick={() => setEditModal(false)}
         >
           Отмена
         </Button>

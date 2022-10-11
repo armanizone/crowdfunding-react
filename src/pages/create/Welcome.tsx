@@ -102,9 +102,7 @@ function Welcome() {
             </Button>
           </div>
           <div className='hidden lg:block flex-1 max-w-lg h-auto'>
-            <div className='w-full h-full relative'>
-              <img src={createWelcome} alt='welcome'/>
-            </div>
+            <img src={createWelcome} alt='welcome'/>
           </div>
         </div>
       </div>

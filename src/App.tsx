@@ -25,8 +25,6 @@ import Incubator from './pages/project/edit/Incubator';
 import Main from './pages/project/edit/Main';
 import Rewards from './pages/project/edit/Rewards/Rewards';
 import Verification from './pages/project/edit/Verification';
-import { useDispatch, useSelector } from './redux/store';
-import { Close } from './redux/slices/authModalSlice';
 import Settings from './pages/profile/settings';
 import Draft from './pages/profile/projects/Draft';
 import Active from './pages/profile/projects/Active';
@@ -34,14 +32,16 @@ import Closed from './pages/profile/projects/Closed';
 import UserData from './pages/profile/settings/UserData';
 import ChangePassword from './pages/profile/settings/ChangePassword';
 
+import { useDispatch, useSelector } from './redux/store';
+import { Close } from './redux/slices/authModalSlice';
+
 function App() {
 
   const {opened} = useSelector(state => state.authModalReducer)
   const dispath = useDispatch()
 
-  const onClose = () => {
-    dispath(Close())
-  }
+  const onClose = () => dispath(Close())
+  
 
   return ( 
     <MantineProvider>

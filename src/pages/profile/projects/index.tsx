@@ -12,6 +12,8 @@ import Closed from './Closed'
 import Draft from './Draft'
 import { IProject } from '../../../interfaces/project.interface'
 
+import { useMediaQuery } from '@mantine/hooks';
+
 function MyProjects() {
 
   const {user} = useAuth()
@@ -43,31 +45,35 @@ function MyProjects() {
     navigate(`/profile/${value}`)
   }
 
+  const matches = useMediaQuery('(min-width: 978px)');
+
   return (
     <div className='w-full'>
       <div className='flex flex-col gap-y-4'>
         <Tabs
-          orientation='vertical'
+          orientation={matches ? 'vertical' : 'horizontal'}
           classNames={{
-            tabIcon: 'text-2xl p-4',
+            tabIcon: 'text-2xl p-2 md:p-4',
             tabsList: 'bg-white',
-            root: 'border'
+            root: 'border',
           }}
           value={tabValue}
           onTabChange={value => handleTabChange(value)}
         >
-          <Tabs.List>
+          <Tabs.List
+            position={matches ? 'left' : 'center'}
+          >
             <Tabs.Tab value='projects' icon={<FaDraftingCompass/>}></Tabs.Tab>
             <Tabs.Tab value='projects/active' icon={<FaRocket/>} ></Tabs.Tab>
             <Tabs.Tab value='projects/closed' icon={<FaCalendarAlt/>}></Tabs.Tab>
           </Tabs.List>
-          <Tabs.Panel value='projects' p='xl' className='bg-white'>
+          <Tabs.Panel value='projects' className='bg-white p-3 md:p-6'>
             <Draft values={drafted} loading={loading} />
           </Tabs.Panel>
-          <Tabs.Panel value='projects/active' p='xl' className='bg-white'>
+          <Tabs.Panel value='projects/active' className='bg-white p-3 md:p-6'>
             <Active values={active} loading={loading} />
           </Tabs.Panel>
-          <Tabs.Panel value='projects/closed' p='xl' className='bg-white'>
+          <Tabs.Panel value='projects/closed' className='bg-white p-3 md:p-6'>
             <Closed values={closed} loading={loading} />
           </Tabs.Panel>
         </Tabs>

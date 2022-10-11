@@ -9,7 +9,7 @@ function Cover() {
         <div className='flex-1 flex justify-center items-end h-full mb-8 relative'>
 
           <div className='z-50 text-center'>
-            <h2 className='text-4xl md:text-5xl lg:text-6xl mb-20'>Бизнес инкубатор</h2>
+            <h2 className='text-xl md:text-4xl lg:text-5xl mb-20'>Бизнес инкубатор</h2>
             <Button
               size='md'
               component={Link}
@@ -22,7 +22,7 @@ function Cover() {
         <div className='flex-1 flex justify-center items-end h-full mb-8 relative'>
 
           <div className='z-50 text-center'>
-            <h2 className='text-4xl md:text-5xl lg:text-6xl mb-20'>Стартап проекты</h2>
+            <h2 className='text-xl md:text-4xl lg:text-5xl mb-20'>Стартап проекты</h2>
             <Button
               size='md'
             >
