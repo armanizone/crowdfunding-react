@@ -1,8 +1,7 @@
 import React from 'react'
 import { Loader, Tabs } from '@mantine/core';
-import { IProject } from '../../../interfaces/project.interface';
+import { IProject, IReward } from '../../../types/types';
 import useAuth from '../../../hooks/useAuth';
-import { IReward } from '../../../interfaces/reward.interface';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Main from './Main';
 import Details from './Details';

@@ -10,7 +10,7 @@ import { FaDraftingCompass, FaRocket, FaCalendarAlt } from 'react-icons/fa'
 import Active from './Active'
 import Closed from './Closed'
 import Draft from './Draft'
-import { IProject } from '../../../interfaces/project.interface'
+import { IProject } from '../../../types/types'
 
 import { useMediaQuery } from '@mantine/hooks';
 

@@ -19,7 +19,7 @@ const styles = {
   progress: '',
 }
 
-function ProjectHead({project}: any) {
+function Head({project}: any) {
   return (
     <div className={styles.head}>
       <div className={styles.left}>
@@ -91,4 +91,4 @@ function ProjectHead({project}: any) {
   )
 }
 
-export default ProjectHead
+export default Head

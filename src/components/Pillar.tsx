@@ -1,19 +1,20 @@
 import { Button } from '@mantine/core'
 import dayjs from 'dayjs'
 import React from 'react'
-import { FiEdit } from 'react-icons/fi'
-import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
-import { IProject } from '../interfaces/project.interface'
+import { IProject } from '../types/types'
 import cn from 'classnames'
 import Tag from './Tag'
 import { openConfirmModal } from '@mantine/modals'
 import { deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
 
+import { FiEdit } from 'react-icons/fi'
+import { RiDeleteBin6Fill } from 'react-icons/ri'
+import { BsEye } from 'react-icons/bs'
 interface PillarProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   project: IProject,
-  type?: 'draft' | 'active' | 'closed',
+  type?: 'draft' | 'active' | 'closed' | 'moderation',
 }
 
 function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element {
@@ -23,6 +24,7 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
   const isDraft = type === 'draft'
   const isActive = type === 'active'
   const isClosed = type === 'closed'
+  const onModeration = type === 'moderation'
 
   const deleteTrack = async () => await deleteDoc(doc(db, 'projects', project?.id as string))
   
@@ -39,25 +41,51 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
   return (
     <div
       key={project?.id}
-      className={(cn(className, 'flex flex-col sm:flex-row bg-white border border-slate-200'))}
+      className={(cn(className, 'flex flex-col lg:flex-row bg-white border border-slate-200'))}
       {...props}
     >
       <div className=''>
         {project?.image
-          ? <img src={project?.image} className='aspect-video sm:w-72 lg:w-[370px] h-full object-cover' alt="" />
-          : <div className='aspect-video sm:w-72 lg:w-[370px] h-full object-cover bg-slate-200'></div>
+          ? <img src={project?.image} className='aspect-video lg:w-[370px] h-full object-cover mb-1 lg:mb-0' alt="" />
+          : <div className='aspect-video lg:w-[370px] h-full object-cover bg-slate-200 mb-1 lg:mb-0'></div>
         }
       </div>
       <div className='p-3 md:p-4 flex-1 flex flex-col justify-between gap-y-4'>
         <div className='flex flex-col md:flex-row gap-y-4 items-start gap-x-4'>
-          {isDraft && (
-            <Tag title='Черновик' type='draft'/>
+          {isDraft && <Tag title='Черновик' type='draft'/>}
+          {isActive && <Tag title='Идет сбор' type='active'/>}
+          {isClosed && <Tag title='Завершен' type='closed'/>}
+          {(isDraft || onModeration)  && (
+            <Button
+              variant='subtle'
+              compact
+              classNames={{
+                label: 'underline',
+                leftIcon: 'text-lg',
+                root: 'px-0 md:px-2'
+              }}
+
+              leftIcon={<BsEye />}
+              // onClick={confirmDeleteModal}
+            >
+              Прелпросмотр
+            </Button>
           )}
-          {isActive && (
-            <Tag title='Идет сбор' type='active'/>
-          )}
-          {isClosed && (
-            <Tag title='Завершен' type='closed'/>
+          {(isActive || isClosed) && (
+            <Button
+              variant='subtle'
+              compact
+              classNames={{
+                label: 'underline',
+                leftIcon: 'text-lg',
+                root: 'px-0 md:px-2'
+              }}
+              leftIcon={<BsEye />}
+              // onClick={confirmDeleteModal}
+            >
+              Перейти
+            </Button>
+
           )}
           {!isClosed && (
             <Button
@@ -65,12 +93,12 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
               compact
               classNames={{
                 label: 'underline',
-                leftIcon: 'text-lg'
+                leftIcon: 'text-lg',
+                root: 'px-0 md:px-2'
               }}
               leftIcon={<FiEdit />}
               component={Link}
               to={`/project/${project?.id}/edit`}
-              px={0}
             >
               Редактировать
             </Button>
@@ -82,14 +110,15 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
               compact
               classNames={{
                 label: 'underline',
-                leftIcon: 'text-lg'
+                leftIcon: 'text-lg',
+                root: 'px-0 md:px-2'
               }}
               leftIcon={<RiDeleteBin6Fill />}
               onClick={confirmDeleteModal}
-              px={0}
             >
               Удалить
             </Button>
+
             :
             <Button
               disabled={project?.status !== 'confirmed'}
@@ -118,19 +147,19 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
         </div>
         <div className='grid grid-cols-2 lg:grid-cols-4 justify-between items-center gap-4'>
           <div className='shadow p-2'>
-            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Вознаграждений</p>
+            <p className='font-light text-[10px] lg:text-xs uppercase tracking-wide text-center'>Вознаграждений</p>
+            <p className='font-bold text-lg md:text-xl text-center'>{project?.rewards ?? 0}</p>
+          </div>
+          <div className='shadow p-2'>
+            <p className='font-light text-[10px] lg:text-xs uppercase tracking-wide text-center'>Собрано</p>
             <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
           <div className='shadow p-2'>
-            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Собрано</p>
+            <p className='font-light text-[10px] lg:text-xs uppercase tracking-wide text-center'>Приобретено</p>
             <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
           <div className='shadow p-2'>
-            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Приобретено</p>
-            <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
-          </div>
-          <div className='shadow p-2'>
-            <p className='font-light text-xs md:text-sm uppercase tracking-wide text-center'>Комментариев</p>
+            <p className='font-light text-[10px] lg:text-xs uppercase tracking-wide text-center'>Комментариев</p>
             <p className='font-bold text-lg md:text-xl text-center'>{project?.backed}</p>
           </div>
         </div>

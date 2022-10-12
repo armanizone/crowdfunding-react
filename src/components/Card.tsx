@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { Progress } from '@mantine/core'
-import { IProject } from '../interfaces/project.interface'
+import { IProject } from '../types/types'
 
 import { IoTime } from 'react-icons/io5'
 import { Link } from 'react-router-dom'

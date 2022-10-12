@@ -46,13 +46,15 @@ function EditReward({editReward, editModal, setEditModal}: any) {
   const updateReward = async () => {
     setLoading(true)
     if (image) {
-      await uploadImage(`projects/${id}/main-img`, image)
+      const url = `projects/${id}/main-img`
+      await uploadImage(url, image)
       .then(() => {
-        getImage(`projects/${id}/main-img`)
+        getImage(url)
         .then(async e => {
           await updateDoc(doc(db, 'rewards', reward.id), {
             ...reward,
-            image: e
+            image: e,
+            
           })
         })
       })

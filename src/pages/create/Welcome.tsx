@@ -49,6 +49,8 @@ function Welcome() {
       started: null,
       category: null,
       earned: 0, 
+      rewards: 0,
+      comments: 0
     })
     .then((e) => {
       navigate(`/project/${id}/edit`)

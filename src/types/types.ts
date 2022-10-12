@@ -1,4 +1,20 @@
-import { IReward } from './reward.interface';
+export interface IReward {
+  project_id?: string | null,
+  title: string | null,
+  description: string | null,
+  how_to_get: string | null,
+  image: string | null,
+  imageRef?: string | null,
+  cost: number | null,
+  count: number | null,
+  bought: number | null,
+  sending: Date | string | null,
+  uid?: string | null,
+  created_at?: Date | string | null,
+  updated_at?: Date | string | null,
+  id?: string | null
+}
+
 
 export interface ProjectCardProps {
 
@@ -24,6 +40,7 @@ export interface IProject {
   phone?: number | null,
   document_front?: File | null,
   document_back?: File | null,
+  rewards?: number,
   created_at?: any,
   updated_at?: any,
 }

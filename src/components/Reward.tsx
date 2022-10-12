@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { Button } from '@mantine/core'
-import { IReward } from '../interfaces/reward.interface'
+import { IReward } from '../types/types'
 import dayjs from 'dayjs'
 interface RewardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   reward: IReward,

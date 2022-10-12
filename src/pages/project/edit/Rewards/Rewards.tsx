@@ -9,11 +9,12 @@ import { getImage, uploadImage } from '../../../../service/StorageService'
 import { randomId } from '@mantine/hooks'
 import EditReward from './EditReward';
 import ProjectService from '../../../../service/ProjectService';
-import { IReward } from '../../../../interfaces/reward.interface';
+import { IReward } from '../../../../types/types';
 import { openConfirmModal } from '@mantine/modals';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../../../utils/firebase';
+import { deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
+import { db, storage } from '../../../../utils/firebase';
 import { showNotification } from '@mantine/notifications';
+import { deleteObject, ref } from 'firebase/storage';
 
 
 function Rewards({project, id, rewards = []}: EditProjectProps) {
@@ -52,7 +53,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string) => {
     if (e.target) {
       const { name, value } = e.target
-      if (parseInt(value)) return setReward({ ...reward, [name]: parseInt(value) })
+      if (parseInt(value) && (name === 'cost' || name === 'count')) return setReward({ ...reward, [name]: parseInt(value) })
       setReward({...reward, [name]: value })
       return
     }
@@ -64,9 +65,10 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
   const createReward = async () => {
     handleLoading('create', true)
     if (image) {
-      await uploadImage(`/rewards/${rewardId}/main-img`, image!)
+      const url = `/rewards/${rewardId}/main-img`
+      await uploadImage(url, image!)
       .then(() => {
-        getImage(`/rewards/${rewardId}/main-img`)
+        getImage(url)
         .then(async e => {
           RewardService.createReward(rewardId as string, {
             ...reward, 
@@ -86,8 +88,9 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
               bought: 0,
               sending: new Date(),
             })
+
             await ProjectService.updateProject(id as string, {
-              rewards: rewards?.length! + 1 ?? 0,
+              rewards: increment(1),
             })
             showNotification({
               title: 'Вознаграждение',
@@ -154,10 +157,19 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
     setEditModal(true)
   }
 
-  const deleteReward = async (id: string) => {
-    await deleteDoc(doc(db, 'rewards', id))
+  const deleteReward = async (rewardId: string, image: string) => {
+    if (image) {
+      const deleteRef = ref(storage, `/rewards/${rewardId}/main-img`)
+      deleteObject(deleteRef)
+      .catch(() => {
+        return
+      })
+    }
+    await deleteDoc(doc(db, 'rewards', rewardId))
     .then(e => {
-      console.log(e);
+      updateDoc(doc(db, 'projects', id!), {
+        rewards: increment(-1)
+      })
       showNotification({
         title: 'Вознаграждение', 
         message: 'Вознаграждение успешно удалено!',
@@ -174,7 +186,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
     })
   }
 
-  const confirmDelete = (id: string) => openConfirmModal({
+  const confirmDelete = (id: string, image: string) => openConfirmModal({
     title: 'Подтверждение действия',
     centered: true, 
     children: (
@@ -184,7 +196,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
     confirmProps: {
       color: 'red'
     },
-    onConfirm: () => deleteReward(id)
+    onConfirm: () => deleteReward(id, image)
   })
     
   
@@ -370,7 +382,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                       <Button compact size='sm' variant='subtle' onClick={() => handleRewardEdit(item)}>
                         Редактировать
                       </Button>
-                      <Button compact size='sm' variant='subtle' color='red' onClick={() => confirmDelete(item?.id!)}>
+                      <Button compact size='sm' variant='subtle' color='red' onClick={() => confirmDelete(item?.id!, item?.image!)}>
                         Удалить
                       </Button>
                     </div>

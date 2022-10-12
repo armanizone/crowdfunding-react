@@ -28,7 +28,7 @@ function Details({ details, id }: EditProjectProps) {
     setLoading({ ...loading, [name]: value })
   }
 
-  const randomid = randomId()
+  const randomid = randomId().slice(8)
 
   const handleImageUpload = React.useCallback((file: File): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -38,15 +38,16 @@ function Details({ details, id }: EditProjectProps) {
       new Compressor(file, {
         quality: 0.6,
         async success(file) {
-          await uploadImage(`/projects/${id}/details-img-${randomid}`, file)
+          const url = `/projects/${id}/details-img-${randomid}`
+          await uploadImage(url, file)
             .then(async e => {
               console.log(e);
-              await getImage(`/projects/${id}/details-img-${randomid}`)
-                .then(e => {
-                  resolve(e)
-                  handleLoading('save', false)
-                })
-                .catch(() => reject(new Error('Upload failed')));
+              await getImage(url)
+              .then(e => {
+                resolve(e)
+                handleLoading('save', false)
+              })
+              .catch(() => reject(new Error('Upload failed')));
             })
         },
       })

@@ -34,6 +34,12 @@ import ChangePassword from './pages/profile/settings/ChangePassword';
 
 import { useDispatch, useSelector } from './redux/store';
 import { Close } from './redux/slices/authModalSlice';
+import Comments from './pages/project/Comments';
+import Faq from './pages/project/Faq';
+import Rating from './pages/project/Rating';
+import Body from './pages/project/Body';
+import Description from './pages/project/Description';
+import Fee from './pages/project/Fee';
 
 function App() {
 
@@ -77,7 +83,14 @@ function App() {
                 </Route>
               </Route>
               <Route path='/project/:id'>
-                <Route index element={<Project/>}/>
+                <Route element={<Project/>}>
+                  <Route index element={<Description/>} />
+                  <Route path='comments' element={<Comments/>} />
+                  <Route path='faq' element={<Faq/>} />
+                  <Route path='rating' element={<Rating/>} />
+                  <Route path='fee' element={<Fee/>} />
+                </Route>
+
                 <Route path='edit' element={<EditProject/>}>
                   <Route index element={<Main/>} />
                   <Route path='details' element={<Details/>}/>
