@@ -84,7 +84,11 @@ function Verification({project, id}: EditProjectProps) {
           </div>
         </CreateLabel>
       </div>
-      <CreateButtons back='/edit/rewards' toModeration={toModeration} />
+      <CreateButtons 
+        back='/edit/rewards'
+        toModeration={toModeration}
+        projectId={id as string}
+       />
     </div>
   )
 }

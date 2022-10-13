@@ -12,7 +12,7 @@ interface CardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDiv
 }
 
 const styles = {
-  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden w-[297px] bg-white'
+  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden bg-white'
 }
 
 function Card({project, type, recomended, className, ...props}: CardProps): JSX.Element {

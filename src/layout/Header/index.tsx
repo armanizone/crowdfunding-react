@@ -28,6 +28,7 @@ function Header() {
 
   React.useEffect(() => {
     setOpened(false)
+    setProfile(false)
   }, [location])
 
   return (
@@ -108,10 +109,10 @@ function Header() {
         opened={profile}
         onClose={() => setProfile(false)}
         position='right'
-        size='50%'
+        size='280px'
         padding='md'
       >
-        Профиль
+        <UserMenu mobile />
       </Drawer>
     </div>
   )

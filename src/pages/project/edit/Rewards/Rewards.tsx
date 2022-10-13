@@ -396,6 +396,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
           loading={loading.create} 
           back='/edit/details' 
           forward='/edit/verification' 
+          projectId={id as string}
         />
       </div>
       <EditReward 

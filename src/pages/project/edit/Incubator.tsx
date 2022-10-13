@@ -10,7 +10,7 @@ const string =
   adipisicing elit.Quo sunt ea laborum, laboriosam repellendus, similique quisquam sapiente aliquid voluptas esse id odit autem accusamus porro corporis optio.Omnis, ad cupiditate`
 
 
-function Incubator({project}: EditProjectProps) {
+function Incubator({project, id}: EditProjectProps) {
 
   const [selected, setSelected] = React.useState<number | undefined>(undefined)
 
@@ -63,7 +63,10 @@ function Incubator({project}: EditProjectProps) {
           </div>
         </div>
       </div>
-      <CreateButtons incubator />
+      <CreateButtons 
+        incubator 
+        projectId={id as string}
+      />
     </div>
   )
 }

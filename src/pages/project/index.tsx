@@ -1,49 +1,56 @@
 import React from 'react'
 import { collection, doc, query, where } from 'firebase/firestore'
-import { Load } from '../../components'
-import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore'
+import { Load, Reward } from '../../components'
+import { useCollectionData, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore'
 import { db } from '../../utils/firebase'
-import ProjectFee from './Fee'
+import Fee from './Fee'
 import Head from './Head'
 import Body from './Body'
-import Description from './Description'
-import Rating from './Rating'
-import Faq from './Faq'
-import Comments from './Comments'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
-const styles = {
-  project: 'w-full my-6',
-  projectInner: 'px-0 bg-border rounded-none',
-  projectBody: 'flex flex-col',
-  projectMain: 'flex gap-x-4 mt-16',
-}
 
-function Project() {
-
+function Project({projectId}: any) {
 
   const { id } = useParams()
 
-  const [value, loadjng] = useDocumentData(doc(db, 'projects', id!))
+  const location = useLocation().pathname
+
+  const [value, loadjng] = useDocumentDataOnce(doc(db, 'projects', id ?? projectId!))
   const [rewards] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', value?.id ?? ' ')))
+
+  React.useEffect(() => {
+    document.body.style.backgroundColor = 'white'
+    return () => {
+      document.body.style.backgroundColor = 'rgb(248 250 252)'
+    }
+  }, [])
 
   if (loadjng) return <Load/>
 
   return (
-    <div className={styles.project}>
-      <div className={styles.projectInner}>
+    <div className='w-full my-6'>
+      <div className='px-0 bg-border rounded-none'>
         <div className="container">
-          <div className={styles.projectBody}>
+          <div className='flex flex-col'>
             <Head
               project={value}
               // state={state}
               // donation={donation}
               // getProject={getProject}
             />
-            <div className='grid grid-cols-[1fr_297px] mt-8'>
-              <Body project={value} rewards={rewards} />
-              <ProjectFee rewards={rewards}/>
+            <div className='grid grid-cols-1 lg:grid-cols-[1fr_357px] gap-4 mt-8'>
+              <Body project={value} rewards={rewards} projectId={projectId} />
+              <Fee rewards={rewards} projectId={projectId} />
             </div>
+            {location.includes('/fee') && (
+              <div className='grid grid-cols-1 sm:grid-col-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+                {rewards?.map((item: any, i: number) => {
+                  return (
+                    <Reward reward={item} key={i} />
+                  )
+                })} 
+              </div>
+            )}
           </div>
         </div>
       </div>

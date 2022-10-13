@@ -1,5 +1,5 @@
-import { Button } from '@mantine/core'
 import React from 'react'
+import { Button } from '@mantine/core'
 import { Heading } from '../../components'
 
 function Bill() {

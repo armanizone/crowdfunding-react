@@ -32,6 +32,9 @@ import Closed from './pages/profile/projects/Closed';
 import UserData from './pages/profile/settings/UserData';
 import ChangePassword from './pages/profile/settings/ChangePassword';
 
+import Incubator1 from './pages/project/Incubator';
+
+
 import { useDispatch, useSelector } from './redux/store';
 import { Close } from './redux/slices/authModalSlice';
 import Comments from './pages/project/Comments';
@@ -88,6 +91,7 @@ function App() {
                   <Route path='comments' element={<Comments/>} />
                   <Route path='faq' element={<Faq/>} />
                   <Route path='rating' element={<Rating/>} />
+                  <Route path='incubator' element={<Incubator1/>} />
                   <Route path='fee' element={<Fee/>} />
                 </Route>
 

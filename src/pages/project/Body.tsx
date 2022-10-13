@@ -5,9 +5,10 @@ import Comments from './Comments'
 import Description from './Description'
 import Faq from './Faq'
 import Fee from './Fee'
+import Incubator from './Incubator'
 import Rating from './Rating'
 
-function Body({project, rewards}: any) {
+function Body({project, projectId}: any) {
 
   const location = useLocation().pathname
 
@@ -19,6 +20,7 @@ function Body({project, rewards}: any) {
     (location.includes(`/project/${id}/comments`) && `/project/${id}/comments`) ||
     (location.includes(`/project/${id}/faq`) && `/project/${id}/faq`) ||
     (location.includes(`/project/${id}/fee`) && `/project/${id}/fee`) ||
+    (location.includes(`/project/${id}/incubator`) && `/project/${id}/incubator`) ||
     (location.includes(`/project/${id}/rating`) && `/project/${id}/rating`) || `/project/${id}`
 
   const handleTab = (value: string) => {
@@ -27,10 +29,11 @@ function Body({project, rewards}: any) {
 
 
   return (
-    <div className='p-4 rounded-md w-full'>
+    <div className='rounded-md w-full'>
       <Tabs
         classNames={{
-          tabLabel: 'text-xl'
+          tabLabel: 'text-base md:text-lg',
+          panel: 'bg-white mt-5 rounded-md p-3 md:p-4'
         }}
         className='w-full'
         value={tabValue}
@@ -39,23 +42,27 @@ function Body({project, rewards}: any) {
         <Tabs.List
           grow
         >
-          <Tabs.Tab value={`/project/${id}`}>Описание</Tabs.Tab>
-          <Tabs.Tab value={`/project/${id}/comments`}>Коментарии</Tabs.Tab>
-          <Tabs.Tab value={`/project/${id}/faq`}>FAQ</Tabs.Tab>
-          <Tabs.Tab value={`/project/${id}/rating`}>Экспертное мнение</Tabs.Tab>
+          <Tabs.Tab disabled={projectId} value={`/project/${id}`}>Описание</Tabs.Tab>
+          <Tabs.Tab disabled={projectId} value={`/project/${id}/faq`}>FAQ</Tabs.Tab>
+          <Tabs.Tab disabled={projectId} value={`/project/${id}/comments`}>Коментарии</Tabs.Tab>
+          <Tabs.Tab disabled={projectId} value={`/project/${id}/rating`}>Экспертное мнение</Tabs.Tab>
+          <Tabs.Tab disabled={projectId} value={`/project/${id}/incubator`}>Бизнес-Инкубатор</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value={`/project/${id}`} pt={'xl'}>
+        <Tabs.Panel value={`/project/${id}`}>
           <Description project={project}/>
           {/* <div dangerouslySetInnerHTML={{ __html: project?.detail_description }}></div> */}
         </Tabs.Panel>
-        <Tabs.Panel value={`/project/${id}/comments`} pt={'xl'}>
-          <Comments/>
-        </Tabs.Panel>
-        <Tabs.Panel value={`/project/${id}/faq`} pt={'xl'}>
+        <Tabs.Panel value={`/project/${id}/faq`}>
           <Faq/>
         </Tabs.Panel>
-        <Tabs.Panel value={`/project/${id}/rating`} pt={'xl'}>
+        <Tabs.Panel value={`/project/${id}/comments`}>
+          <Comments/>
+        </Tabs.Panel>
+        <Tabs.Panel value={`/project/${id}/rating`}>
           <Rating/>
+        </Tabs.Panel>
+        <Tabs.Panel value={`/project/${id}/incubator`}>
+          <Incubator/>
         </Tabs.Panel>
       </Tabs>
     </div>

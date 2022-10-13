@@ -1,55 +1,41 @@
 import { Avatar, Button, Progress } from '@mantine/core'
 import React from 'react'
 
-const styles = {
-  head: 'flex w-full grid grid-cols-1 md:grid-cols-[grid-cols-[auto_450px]] 2xl:grid-cols-[auto_550px] lg:grid-cols-[auto_450px] bg-white p-4 rounded-md border border-slate-200',
-  right: 'pl-0 pt-4 lg:pt-0 lg:pl-8 flex flex-col h-full',
-  left: 'w-full',
-  img: 'aspect-video  w-full shadow-lg object-cover rounded-lg overflow-hidden',
-  imgFill: 'aspect-video  w-full shadow-lg object-cover rounded-lg overflow-hidden bg-blue-400',
-  categories: 'flex justify-between items-center -mx-2',
-  categoryLabel: 'p-2 text-lg font-head font-medium',
-  status: 'uppercase text-green-600 text-sm md:text-base mb-2 font-medium tracking-wide',
-  title: 'text-2xl md:text-3xl font-semibold font-head',
-  description: 'text-base md:text-lg mt-2 mb-7',
-  author: 'flex pl-3 mb-7',
-  authorAbout: 'ml-3',
-  authorName: 'font-head font-medium',
-  authorCity: 'text-slate-600',
-  progress: '',
-}
-
 function Head({project}: any) {
   return (
-    <div className={styles.head}>
-      <div className={styles.left}>
-        <img src={project?.image} className={styles.img} alt=''/>
-        <div className={styles.categories}>
-          <span className={styles.categoryLabel}>{project?.category}</span>
-          <span className={styles.categoryLabel}>{project?.city}</span>
+    <div className='w-full grid grid-cols-1 md:grid-cols-[grid-cols-[auto_450px]] 2xl:grid-cols-[auto_550px] lg:grid-cols-[auto_450px] gap-4 rounded-lg'>
+      <div className='w-full'>
+        {project?.image ? (
+          <img src={project?.image} className='aspect-video  w-full shadow-lg object-cover overflow-hidden' alt=''/>
+        ) 
+          : <div className='aspect-video  w-full shadow-lg object-cover rounded-tl-lg lg:rounded-br-lg rounded-tr-lg lg:rounded-tr-none overflow-hidden bg-slate-200'></div>
+        }
+        <div className='flex justify-between items-center lg:-mx-3'>
+          <span className='p-3 text-lg font-head font-medium'>{project?.category}</span>
+          <span className='p-3 text-lg font-head font-medium'>{project?.city}</span>
         </div>
       </div>
-      <div className={styles.right}>
-        <div className={styles.status}>
-          <span>
-            Активен
+      <div className='flex flex-col h-full p-3 md:p-4 bg-white rounded-lg'>
+        <div className='mb-2'>
+          <span className='uppercase text-green-600 text-xs md:text-sm font-semibold tracking-wide'>
+            Идет сбор
           </span>
         </div>
-        <div className={styles.title}>
+        <div className='text-2xl md:text-3xl font-semibold font-head'>
           <h3>
             {project?.title ?? "Название проекта"}
           </h3>
         </div>
-        <div className={styles.description}>
+        <div className='text-base md:text-lg mt-2 mb-7'>
           <p>
             {project?.description ?? "Описание проекта"}
           </p>
         </div>
-        <div className={styles.author}>
+        <div className='flex pl-3 mb-7'>
           <Avatar src={project?.image} alt="" radius="xl" size={50} />
-          <div className={styles.authorAbout}>
-            <p className={styles.authorName}>{project?.user?.name ?? 'Имя автора проекта'}</p>
-            <p className={styles.authorCity}>
+          <div className='ml-3'>
+            <p className='font-head font-medium'>{project?.user?.name ?? 'Имя автора проекта'}</p>
+            <p className='text-slate-600'>
               Автор проекта
             </p>
           </div>

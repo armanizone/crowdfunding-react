@@ -53,7 +53,7 @@ function MyProjects() {
         <Tabs
           orientation={matches ? 'vertical' : 'horizontal'}
           classNames={{
-            tabIcon: 'text-2xl p-2 md:p-4',
+            tabIcon: 'text-2xl p-4',
             tabsList: 'bg-white',
             root: 'border',
           }}

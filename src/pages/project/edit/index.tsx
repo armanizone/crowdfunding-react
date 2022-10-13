@@ -8,7 +8,7 @@ import Details from './Details';
 import Rewards from './Rewards/Rewards';
 import Verification from './Verification';
 
-import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useCollectionDataOnce, useDocument, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { collection, doc, query, where } from 'firebase/firestore';
 import { db } from '../../../utils/firebase';
 import Incubator from './Incubator';
@@ -22,7 +22,7 @@ export interface EditProjectProps {
 }
 
 export const styles = {
-  row: 'grid grid-cols-1 sm:grid-cols-[75%_auto] relative gap-4',
+  row: 'grid grid-cols-1 lg:grid-cols-[75%_auto] relative gap-4',
   restInfo: 'absolute bottom-1 right-1 text-xs text-slate-400',
   textarea: 'max-h-[120px] overflow-hidden resize-y',
   addtionalField: 'p-4 grid-cols-1 sm:grid-cols-[275px_auto]',
@@ -50,14 +50,14 @@ function EditProject() {
 
   const {user} = useAuth()
 
-  const [pData, pLoading, pError  ]  = useDocument(doc(db, 'projects', id as string))
+  const [pData, pLoading, pError  ]  = useDocumentData(doc(db, 'projects', id as string))
   const [rData, rLoading, rError] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', id)))
 
   const [project, setProject] = React.useState<IProject | undefined>({})
   const [rewards, setRewards] = React.useState<any[] | undefined> ([])
 
   React.useEffect(() => {
-    setProject(pData?.data())
+    setProject(pData)
   }, [pData, pLoading, pError])
 
   React.useEffect(() => {
@@ -126,7 +126,7 @@ function EditProject() {
               </Tabs.Panel>
               <Tabs.Panel value='/edit/details' pt='md'>
                 <Details
-                  details={pData?.data()?.detail_description}
+                  details={pData?.detail_description}
                   id={id as string}
                   loadin={pLoading}
                 />

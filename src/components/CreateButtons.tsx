@@ -1,74 +1,98 @@
 import React from 'react'
-import { Button } from '@mantine/core'
-import { BsEye } from 'react-icons/bs'
+import Project from '../pages/project'
+import { Button, Modal } from '@mantine/core'
 import { EditProjectContext } from '../pages/project/edit'
-interface CreateButtonsProps {
+
+import cn from 'classnames'
+
+import { BsEye } from 'react-icons/bs'
+interface CreateButtonsProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   back?: string,
   forward?: string,
   incubator?: boolean,
   callback?: () => void,
+  projectId?: string 
   loading?: boolean,
   toModeration?: () => void
 }
 
-function CreateButtons({ back, forward, callback, toModeration, incubator, loading}: CreateButtonsProps) {
+function CreateButtons({ back, forward, callback, toModeration, incubator, loading, projectId, className, ...props}: CreateButtonsProps) {
 
   const { handleTabChange } = React.useContext(EditProjectContext)
 
+  const [opened, setOpened] = React.useState(false)
+
   return (
-    <div className={`wrapper flex items-center mt-4`}>
-      {back && (
-        <Button
-          size='md'
-          onClick={() => handleTabChange(back)}
-        >
-          Назад
-        </Button>
-      )}
-      <div className='w-full flex justify-center gap-x-4'>
-        <Button
-          variant='subtle'
-          leftIcon={<BsEye />}
-          size='md'
-        >
-          Предпросмотр
-        </Button>
-        <Button
-          size='md'
-          variant='light'
-          onClick={callback}
-          loading={loading}
-        >
-          Сохранить
-        </Button>
-      </div>
-      {forward 
-        ?
+    <>
+      <div className={cn(className, `wrapper flex flex-wrap items-center justify-between gap-4 mt-4`)} {...props}>
+        {back && (
           <Button
-            size='md'
-            onClick={() => handleTabChange(forward)}
+            size='sm'
+            onClick={() => handleTabChange(back)}
+            variant='light'
+            fullWidth
           >
+            Назад
+          </Button>
+        )}
+        <div className='w-full flex flex-wrap-reverse gap-4 justify-center gap-x-4 order-first'>
+          <Button
+            variant='subtle'
+            leftIcon={<BsEye />}
+            size='sm'
+            onClick={() => setOpened(true)}
+          >
+            Предпросмотр
+          </Button>
+          <Button
+            size='sm'
+            variant='filled'
+            onClick={callback}
+            loading={loading}
+            fullWidth
+          >
+            Сохранить
+          </Button>
+        </div>
+        {forward ?
+          <Button
+            size='sm'
+            onClick={() => handleTabChange(forward)}
+            variant='light'
+            fullWidth
+            >
             Продолжить
           </Button>
-        :
-          incubator 
-            ? 
-              <Button
-                size='md'
-                disabled
-              >
-                Бизнес-инкубатор
-              </Button>
-            :
-              <Button
-                size='md'
-                onClick={toModeration}
-              >
-                Отправить на модерацию
-              </Button>
-          
-      }
-    </div>
+          :
+          incubator ? 
+            <Button
+              size='sm'
+              disabled
+            >
+              Бизнес-инкубатор
+            </Button>
+          :
+            <Button
+              size='sm'
+              onClick={toModeration}
+            >
+              Отправить на модерацию
+            </Button>
+        }
+      </div>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        overflow='inside'
+        fullScreen
+        padding={0}
+        classNames={{
+          header: 'mr-2 p-4 mb-0',
+        }}
+      >
+        <Project projectId={projectId} />
+      </Modal>
+    </>
   )
 }
 

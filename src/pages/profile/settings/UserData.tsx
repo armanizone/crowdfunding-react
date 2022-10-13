@@ -164,7 +164,7 @@ function UserData(): JSX.Element {
     <div className='w-full h-full relative'>
       <Heading title='Настройки' description='Ваши настройки' />
       <div className='mt-4'>
-        <div className='grid grid-cols-3 gap-4 max-w-2xl'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl'>
           <TextInput
             label='Имя'
             name='displayName'
@@ -230,8 +230,8 @@ function UserData(): JSX.Element {
           />
 
         </div>
-        <div className='flex gap-x-4 max-w-2xl mt-4'>
-          <div className='w-32'>
+        <div className='flex flex-col-reverse sm:flex-row gap-x-4 max-w-2xl mt-4'>
+          <div className='w-32 mx-auto mt-4 mb-2 sm:mt-0'>
             <div className={`${styles.label} font-semibold leading-4 mb-0.5`}>Фотография</div>
             <img
               src={profile.photoURL ?? user?.photoURL ?? 'https://s7.planeta.ru/p?url=https%3A%2F%2Fstatic.planeta.ru%2Fimages%2Favatars%2Fava-u-03.jpg&width=150&height=150&crop=true&pad=false&disableAnimatedGif=true'}

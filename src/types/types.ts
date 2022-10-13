@@ -38,6 +38,7 @@ export interface IProject {
   author?: string | null,
   iin?: number | null,
   phone?: number | null,
+  comments?: number, 
   document_front?: File | null,
   document_back?: File | null,
   rewards?: number,

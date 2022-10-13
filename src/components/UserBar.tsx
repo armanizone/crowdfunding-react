@@ -12,7 +12,7 @@ function UserBar() {
         <img
           src={user?.photoURL ?? 'https://s7.planeta.ru/p?url=https%3A%2F%2Fstatic.planeta.ru%2Fimages%2Favatars%2Fava-u-03.jpg&width=150&height=150&crop=true&pad=false&disableAnimatedGif=true'}
           alt=""
-          className='w-12 shadow-lg shadow-sky-300'
+          className='w-12 shadow-lg shadow-sky-100'
         />
         <div>
           <b className='text-sm md:text-base'>{user?.displayName ?? 'sasageyo'}</b>

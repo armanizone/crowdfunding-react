@@ -229,6 +229,7 @@ function Main({project, id}: EditProjectProps) {
         loading={loading.save} 
         forward='/edit/details' 
         callback={updateProject}
+        projectId={id as string}
       />
     </div>
   )

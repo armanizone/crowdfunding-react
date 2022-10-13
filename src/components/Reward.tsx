@@ -14,7 +14,7 @@ function Reward({reward, className, ...props}: RewardProps): JSX.Element {
   
   return (
     <div 
-      className={cn(className, 'p-4 rounded-md border relative bg-white overflow-hidden')}
+      className={cn(className, 'p-3 md:p-4 rounded-md border relative bg-white overflow-hidden')}
       {...props}
     >
       <div className='relative overflow-hidden'>
@@ -24,7 +24,7 @@ function Reward({reward, className, ...props}: RewardProps): JSX.Element {
             alt={reward.image}
             className='aspect-video object-fill z-50'
           />
-        ) : <div className='aspect-video object-cover z-50 bg-slate-200 border-b border-slate-200'></div>}
+        ) : <div className='aspect-video object-cover z-50 bg-sky-4 bg-slate-200 border-b border-slate-200'></div>}
       </div>
       <div className='flex flex-col mt-4 gap-y-4'>
         <h2 className='text-base font-semibold'>{reward?.title}</h2>
