@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer className="bg-white py-4 border-t border-slate-200 mt-8">
       <div className="container">
-        <div className="sm:flex sm:flex-wrap sm:-mx-4 md:py-4">
+        <div className="sm:flex sm:flex-wrap md:py-4">
           <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6">
             <h5 className="text-xl font-bold mb-4">Features</h5>
             <ul className="list-none footer-links">
@@ -28,7 +28,7 @@ function Footer() {
               </li>
             </ul>
           </div>
-          <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6 mt-8 sm:mt-0">
+          <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6 sm:mt-0">
             <h5 className="text-xl font-bold mb-6">Resources</h5>
             <ul className="list-none footer-links">
               <li className="mb-2">
@@ -45,7 +45,7 @@ function Footer() {
               </li>
             </ul>
           </div>
-          <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6 mt-8 md:mt-0">
+          <div className="text-center sm:text-left sm:w-1/2 md:w-1/4 xl:w-1/6 md:mt-0">
             <h5 className="text-xl font-bold mb-6">About</h5>
             <ul className="list-none footer-links">
               <li className="mb-2">
@@ -76,7 +76,7 @@ function Footer() {
               </li>
             </ul>
           </div>
-          <div className="text-center sm:text-left mt-4 sm:w-1/3 xl:w-1/6 sm:mx-auto xl:mt-0 xl:ml-auto">
+          <div className="text-center sm:text-left mt-4 sm:w-1/3 xl:w-1/6 sm:mx-auto xl:mt-0 xl:ml-auto flex flex-col items-center">
             <h5 className="text-xl font-bold mb-6 sm:text-center xl:text-left">Stay connected</h5>
             <div className="flex justify-center sm:justify-center xl:justify-start">
               <a href='/' className="w-8 h-8 border border-slate-400 rounded-full text-center py-1 text-gray-600 hover:text-white hover:bg-blue-600 hover:border-blue-600">
@@ -91,7 +91,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="text-center sm:text-left sm:flex sm:flex-wrap sm:-mx-4 mt-4 pt-4 sm:mt-12 sm:pt-12 border-t">
+        {/* <div className="text-center sm:text-left sm:flex sm:flex-wrap sm:-mx-4 mt-4 pt-4 border-t">
           <div className="sm:w-full px-4 md:w-1/6">
             <strong>FWR</strong>
           </div>
@@ -110,7 +110,7 @@ function Footer() {
           <div className="md:w-1/4 md:ml-auto mt-6 sm:mt-4 md:mt-0">
             <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white">Get Started</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   )

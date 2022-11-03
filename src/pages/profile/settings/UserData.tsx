@@ -5,7 +5,7 @@ import { cities } from '../../../utils/db'
 import useAuth from '../../../hooks/useAuth'
 import { updateProfile } from 'firebase/auth'
 import { getImage, uploadImage } from '../../../service/StorageService'
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../utils/firebase'
 import { userSchema } from '../../../utils/validation'
 import Compressor from 'compressorjs'
@@ -32,6 +32,7 @@ function UserData(): JSX.Element {
       telegram: data?.telegram ?? '',
       photoURL: user?.photoURL ?? null,
     })
+    // eslint-disable-next-line
   }, [loadd])
 
   const [image, setImage] = React.useState<File | null>(null)
@@ -58,9 +59,11 @@ function UserData(): JSX.Element {
       const { name, value } = e.target
       if (parseInt(value)) return setProfile({...profile, [name]: parseInt(value) })
       setProfile({ ...profile, [name]: value})
+      setErrors({...errors, [name]: []})
       return
     } 
     setProfile({...profile, [name]: val})
+    setErrors({...errors, [name]: []})
   }
 
   const [loading, setLoading] = React.useState(false)
@@ -90,7 +93,7 @@ function UserData(): JSX.Element {
       displayName: profile.displayName,
       photoURL: url ?? null,
     })
-    await updateDoc(doc(db, 'users', user?.email!), {
+    await updateDoc(doc(db, 'users', user?.uid!), {
       ...profile,
       photoURL: url ?? null,
       uid: user?.uid,
@@ -118,6 +121,7 @@ function UserData(): JSX.Element {
               })
               .catch((err) => {
                 yupErrorToErrorObject(err)
+                setLoading(false)
               })
             })
           })
@@ -128,7 +132,7 @@ function UserData(): JSX.Element {
       })
       return
     }
-    if (profile.phoneNumber.length != 0) {
+    if (profile.phoneNumber.length !== 0) {
       await userSchema.validate({
         displayName: profile.displayName,
         phoneNumber: profile.phoneNumber

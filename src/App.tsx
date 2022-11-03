@@ -1,9 +1,8 @@
 import React from 'react';
-import { MantineProvider, Modal } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals'
 import { NotificationsProvider } from '@mantine/notifications'
 import { Route, Routes } from 'react-router-dom';
-import AuthForm from './components/Authform';
 import { Footer, Header } from './layout';
 import About from './pages/about';
 import EarlyAccess from './pages/about/early-access';
@@ -34,23 +33,14 @@ import ChangePassword from './pages/profile/settings/ChangePassword';
 
 import Incubator1 from './pages/project/Incubator';
 
-
-import { useDispatch, useSelector } from './redux/store';
-import { Close } from './redux/slices/authModalSlice';
 import Comments from './pages/project/Comments';
 import Faq from './pages/project/Faq';
 import Rating from './pages/project/Rating';
-import Body from './pages/project/Body';
 import Description from './pages/project/Description';
 import Fee from './pages/project/Fee';
+import AuthModal from './components/AuthModal';
 
 function App() {
-
-  const {opened} = useSelector(state => state.authModalReducer)
-  const dispath = useDispatch()
-
-  const onClose = () => dispath(Close())
-  
 
   return ( 
     <MantineProvider>
@@ -106,18 +96,7 @@ function App() {
             </Routes>
             <Footer/>
           </div>
-          <Modal
-            opened={opened}
-            onClose={onClose}
-            title='Авторизация'
-            size='sm'
-            centered
-            closeOnClickOutside={false}
-            closeOnEscape
-            lockScroll
-          >
-            <AuthForm/>
-          </Modal>
+          <AuthModal/>
         </NotificationsProvider>
       </ModalsProvider>
     </MantineProvider>

@@ -83,10 +83,11 @@ export default function useForm() {
           await updateProfile(e.user, {
             displayName: values.name
           })
-          await setDoc(doc(db, 'users', e.user.email!), {
+          await setDoc(doc(db, 'users', e.user.uid!), {
             displayName: values.name,
             email: values.email, 
-            created_at: serverTimestamp()
+            created_at: serverTimestamp(),
+            uid: e.user.uid
           })
           UserService.sendEmail(e.user)
           .then(() => {

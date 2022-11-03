@@ -9,15 +9,20 @@ import { getImage, uploadImage } from '../../../../service/StorageService'
 import { randomId } from '@mantine/hooks'
 import EditReward from './EditReward';
 import ProjectService from '../../../../service/ProjectService';
-import { IReward } from '../../../../types/types';
 import { openConfirmModal } from '@mantine/modals';
 import { deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../../../../utils/firebase';
 import { showNotification } from '@mantine/notifications';
 import { deleteObject, ref } from 'firebase/storage';
+import { rewardSchema } from '../../../../utils/validation';
+
+import 'dayjs/locale/ru';
+import useAuth from '../../../../hooks/useAuth';
 
 
 function Rewards({project, id, rewards = []}: EditProjectProps) {
+
+  const {user} = useAuth()
 
   const [image, setImage] = React.useState<File | null>(null)
 
@@ -45,25 +50,63 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
     bought: 0,
     sending: new Date(),
   })
+
+  const [errors, setErrors] = React.useState<any>({
+    title: [],
+    description: [],
+    how_to_get: [],
+    image: [],
+    cost: [],
+    count: [],
+    bought: [],
+  })
   
   const [infinite, setInfinite] = React.useState(false)
 
-  const handleInfinite = () => setInfinite(q => !q)
+  const handleInfinite = () => {
+    setInfinite(q => !q)
+    setErrors({...errors, count: []})
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string) => {
     if (e.target) {
       const { name, value } = e.target
       if (parseInt(value) && (name === 'cost' || name === 'count')) return setReward({ ...reward, [name]: parseInt(value) })
       setReward({...reward, [name]: value })
+      setErrors({...errors, [name]: []})
       return
     }
     setReward({...reward, [name]: val })
+    setErrors({...errors, [name]: []})
   }
 
   const rewardId = `${id}-${randomId().slice(8)}`
 
+  const yupErrorToErrorObject = (err: any) => {
+    const object: any[] = [];
+    err.inner.forEach((x: any) => {
+      if (x.path !== undefined) {
+        object[x.path] = x.errors;
+      }
+    });
+    return setErrors(object);
+  }
+
   const createReward = async () => {
     handleLoading('create', true)
+    await rewardSchema.validate({
+      ...reward
+    }, {abortEarly: false})
+    .then(() => {
+      console.log('asd');
+      handleLoading('create', false)
+
+    })
+    .catch((err) => {
+      yupErrorToErrorObject(err)
+      handleLoading('create', false)
+    })
+    
     if (image) {
       const url = `/rewards/${rewardId}/main-img`
       await uploadImage(url, image!)
@@ -91,6 +134,10 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
 
             await ProjectService.updateProject(id as string, {
               rewards: increment(1),
+              user: {
+                displayName: user?.displayName,
+                photoURL: user?.photoURL,
+              },
             })
             showNotification({
               title: 'Вознаграждение',
@@ -199,8 +246,6 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
     onConfirm: () => deleteReward(id, image)
   })
     
-  
-
   return (
     <>
       <div>
@@ -227,10 +272,11 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                 placeholder="Не более 50 символов"
                 required
                 variant="unstyled"
-                maxLength={120}
+                maxLength={70}
+                error={errors.title?.[0]}
               />
               <div className={styles.restInfo}>
-                Осталось {120 - (reward?.title?.length! ?? 0)} символов
+                Осталось {70 - (reward?.title?.length! ?? 0)} символов
               </div>
             </CreateLabel>
             <CreateLabel label='Картинка'>
@@ -263,6 +309,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                 py={6}
                 px={16}
                 maxLength={500}
+                error={errors.description?.[0]}
               />
               <div className={styles.restInfo}>
                 Осталось {500 - (reward?.description.length! ?? 0)} символов
@@ -300,9 +347,10 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                 py={6}
                 px={16}
                 size='md'
-                placeholder="Не более 50 символов"
+                placeholder=""
                 required
                 variant="unstyled"
+                error={errors.cost?.[0]}
               />
             </CreateLabel>
             <CreateLabel label='Количество'>
@@ -321,6 +369,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                     placeholder="Не более 50 символов"
                     required
                     variant="unstyled"
+                    error={errors.count?.[0]}
                   />
                   {infinite && (
                     <Overlay />
@@ -352,6 +401,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
                 placeholder="Не более 50 символов"
                 required
                 variant="unstyled"
+                locale="ru"
               />
             </CreateLabel>
             <div className='flex justify-center mt-4'>
@@ -376,7 +426,7 @@ function Rewards({project, id, rewards = []}: EditProjectProps) {
               <Reward reward={reward}/>
               {rewards?.map((item, i) => {
                 return (
-                  <div className='relative group' key={i}>
+                  <div className='relative group' key={i} style={{ animationDelay: `${((i + 1) * 150)}ms` }}>
                     <Reward reward={item} className=''/>
                     <div className='flex justify-end gap-x-4 border border-t-0 py-2 px-4 opacity-0 group-hover:opacity-100 transition-all duration-200'>
                       <Button compact size='sm' variant='subtle' onClick={() => handleRewardEdit(item)}>

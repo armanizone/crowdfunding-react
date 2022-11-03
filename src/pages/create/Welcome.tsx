@@ -1,7 +1,7 @@
 import React from 'react'
 import ProjectService from '../../service/ProjectService';
 import useAuth from '../../hooks/useAuth';
-import { Button, Checkbox, TextInput } from '@mantine/core';
+import { Button, Checkbox } from '@mantine/core';
 
 import createWelcome from '../../assets/images/create-welcome.svg'
 import { useDispatch } from '../../redux/store';
@@ -37,6 +37,11 @@ function Welcome() {
     ProjectService.createProject(id, {
       id: id,
       uid: user?.uid,
+      user: {
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid, 
+      },
       status: 'created',
       title: null,
       description: null,

@@ -8,7 +8,7 @@ import Details from './Details';
 import Rewards from './Rewards/Rewards';
 import Verification from './Verification';
 
-import { useCollectionData, useCollectionDataOnce, useDocument, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 import { collection, doc, query, where } from 'firebase/firestore';
 import { db } from '../../../utils/firebase';
 import Incubator from './Incubator';
@@ -31,11 +31,13 @@ export const styles = {
   error: 'text-xs'
 }
 interface EditProjectContextProps {
-  handleTabChange: (value: string | null) => void
+  handleTabChange: (value: string | null) => void,
+  project: any
 }
 
 const defaultValue: EditProjectContextProps = {
-  handleTabChange: () => {}
+  handleTabChange: () => {},
+  project: {}
 }
 
 export const EditProjectContext = React.createContext<EditProjectContextProps>(defaultValue)
@@ -99,7 +101,7 @@ function EditProject() {
     <div className='w-full box-border'>
       <div className="container">
         <div className='w-full'>
-          <EditProjectContext.Provider value={{handleTabChange}}>
+          <EditProjectContext.Provider value={{handleTabChange, project}}>
             <Tabs
               value={tabValue}
               onTabChange={(value) => handleTabChange(value)}

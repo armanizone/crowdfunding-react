@@ -1,0 +1,16 @@
+@keyframes fadeup {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.fadeup-animation {
+  opacity: 0;
+  animation: fadeup 300ms ease-in-out forwards;
+}  

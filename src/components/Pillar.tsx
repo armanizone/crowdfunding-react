@@ -1,4 +1,4 @@
-import { Button, Collapse, Modal } from '@mantine/core'
+import { Button } from '@mantine/core'
 import dayjs from 'dayjs'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -12,7 +12,7 @@ import { db } from '../utils/firebase'
 import { FiEdit } from 'react-icons/fi'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { BsEye } from 'react-icons/bs'
-import Project from '../pages/project'
+import PreviewProjectModal from './PreviewProjectModal'
 interface PillarProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   project: IProject,
   type?: 'draft' | 'active' | 'closed' | 'moderation',
@@ -169,18 +169,7 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
           </div>
         </div>
       </div>
-      <Modal
-        opened={preview}
-        onClose={() => setPreview(false)}
-        fullScreen
-        overflow='inside'
-        padding={0}
-        classNames={{
-          header: 'mr-2 p-4 mb-0',
-        }}
-      >
-        <Project projectId={project?.id} />
-      </Modal>
+      <PreviewProjectModal preview={preview} setPreview={setPreview} project={project} />
     </>
   )
 }

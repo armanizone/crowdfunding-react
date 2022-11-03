@@ -6,4 +6,4 @@ function Rating() {
   )
 }
 
-export default Rating
+export default Rating 

@@ -5,11 +5,11 @@ function Accordion() {
   return (
     <div className='w-full'>
       <h2 className='text-center text-2xl font-medium mb-8'>Часто-задаваемые вопросы</h2>
-      <div className='bg-white rounded-md overflow-hidden'>
-        <Acc defaultValue='acc'>
+      <div className='rounded-md overflow-hidden'>
+        <Acc defaultValue='acc' variant='separated' radius={'md'}>
           {Array(10).fill(1).map((e, i: number) => {
             return (
-              <Acc.Item value={String(i)} key={i}>
+              <Acc.Item value={String(i)} key={i} className='bg-white'>
                 <Acc.Control>
                   Lorem ipsum dolor sit amet.
                 </Acc.Control>

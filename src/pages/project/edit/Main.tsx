@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, LoadingOverlay, Select, Textarea, TextInput } from '@mantine/core'
+import { Button, LoadingOverlay, NumberInput, Select, Textarea, TextInput } from '@mantine/core'
 import { EditProjectProps, styles } from '../../../pages/project/edit'
 import { cities } from '../../../utils/db'
 
@@ -7,8 +7,12 @@ import { CreateLabel, CreateButtons, Card, FileInput} from '../../../components'
 import ProjectService from '../../../service/ProjectService'
 import { getImage, uploadImage } from '../../../service/StorageService'
 import Compressor from 'compressorjs'
+import useAuth from '../../../hooks/useAuth'
+import { projectSchema } from '../../../utils/validation'
 
 function Main({project, id}: EditProjectProps) {
+
+  const {user} = useAuth()
 
   const [proj, setProj] = React.useState(project)
   
@@ -24,14 +28,16 @@ function Main({project, id}: EditProjectProps) {
     setProj({ ...proj, image: URL.createObjectURL(e?.target?.files[0])})
   }
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name?: any, val?: string) => {
-    if (e.target) {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | null, name?: any, val?: any) => {
+    if (e?.target) {
       const { name, value } = e.target
+      setErrors({...errors, [name]: []})
       if (parseInt(value)) return setProj({...proj, [name]: parseInt(value) })
       setProj({ ...proj, [name]: value})
       return
     } 
     setProj({...proj, [name]: val})
+    setErrors({...errors, [name]: []})
   }
 
   const [loading, setLoading] = React.useState({
@@ -42,31 +48,76 @@ function Main({project, id}: EditProjectProps) {
     setLoading({ ...loading, [name]: value })
   }
 
+  console.log(proj);
+  
+
+  const yupErrorToErrorObject = (err: any) => {
+    const object: any[] = [];
+    err.inner.forEach((x: any) => {
+      if (x.path !== undefined) {
+        object[x.path] = x.errors;
+      }
+    });
+    return setErrors(object);
+  }
+
+  const [errors, setErrors] = React.useState<any>({
+    title: [],
+    description: [],
+    image: [],
+    city: [],
+    goal: [],
+    duration: []
+  })
+
   const updateProject = async () => {
     handleLoading('save', true)
-    if (image) {
-      new Compressor (image, {  
-        quality: 0.6, 
-        async success(file) {          
-          await uploadImage(`projects/${id}/main-img`, file)
-          .then(() => {
-            getImage(`projects/${id}/main-img`)
-            .then(async e => {
-              await ProjectService.updateProject(id as string, {
-                ...proj,
-                image: e
-              })
-            })
-            .finally(() => handleLoading('save', false))
-          })
-        },
-      })
-      return
-    } 
-    await ProjectService.updateProject(id as string, {
-      ...proj,
+    await projectSchema.validate({
+      ...proj
+    }, {abortEarly: false})
+    .then(() => {
+      handleLoading('save', false)
+      console.log('asd');
     })
-    .finally(() => handleLoading('save', false))
+    .catch((err) => {
+      yupErrorToErrorObject(err)
+      handleLoading('save', false)
+
+    })
+
+    console.log(errors);
+    
+    // if (image) {
+    //   new Compressor (image, {  
+    //     quality: 0.6, 
+    //     async success(file) {          
+    //       await uploadImage(`projects/${id}/main-img`, file)
+    //       .then(() => {
+    //         getImage(`projects/${id}/main-img`)
+    //         .then(async e => {
+    //           await ProjectService.updateProject(id as string, {
+    //             ...proj,
+    //             image: e,
+    //             user: {
+    //               displayName: user?.displayName,
+    //               photoURL: user?.photoURL,
+    //             },
+    //           })
+    //         })
+    //         .finally(() => handleLoading('save', false))
+    //       })
+    //     },
+    //   })
+    //   return
+    // } 
+    // await ProjectService.updateProject(id as string, {
+    //   ...proj,
+    //   user: {
+    //     displayName: user?.displayName,
+    //     photoURL: user?.photoURL,
+    //   },
+    // })
+    // .finally(() => handleLoading('save', false))
   }
   return (
     <div>
@@ -92,6 +143,7 @@ function Main({project, id}: EditProjectProps) {
               required
               variant="unstyled"
               maxLength={50}
+              error={errors.title?.[0]}
             />
             <div className={styles.restInfo}>
               Осталось {50 - (proj?.title?.length! ?? 0)} символов
@@ -158,6 +210,7 @@ function Main({project, id}: EditProjectProps) {
                 input: `${styles.textarea} h-32`
               }}
               maxLength={180}
+              error={errors.description?.[0]}
             />
             <div className={styles.restInfo}>
               Осталось {180 - (proj?.description?.length! ?? 0)} символов
@@ -181,6 +234,7 @@ function Main({project, id}: EditProjectProps) {
               classNames={{
                 item: 'text-sm'
               }}
+              error={errors.city?.[0]}
             // disabled={posted}
             />
           </CreateLabel>
@@ -198,23 +252,26 @@ function Main({project, id}: EditProjectProps) {
               px={16}
               required
               variant='unstyled'
+              error={errors.goal?.[0]}
             // disabled={posted}
             />
           </CreateLabel>
           <CreateLabel 
             label='Длительность проекта'
-            tooltip='Длительность указана в днях (в среднем проекты длятся 30 дней, минимум 10, максимум 90 дней)'
+            tooltip='Длительность указана в днях (в среднем проекты длятся 30 дней, минимум 15, максимум 120 дней)'
             className='border-b'
           >
-            <TextInput
+            <NumberInput
               placeholder='Количество дней после запуска проекта'
               name="duration"
-              value={proj?.duration ?? ''}
-              onChange={handleInput}
+              value={proj?.duration ?? Number('')}
+              onChange={(e) => handleInput(null, 'duration', e)}
               py={6}
               px={16}
               required
               variant="unstyled"
+              error={errors.duration?.[0]}
+              hideControls
             // disabled={posted}
             />
           </CreateLabel>

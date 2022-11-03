@@ -1,3 +1,7 @@
+@import './grid.css';
+@import './preflight.css';
+@import './animations.css';
+
 html,
 body {
   padding: 0;
@@ -14,24 +18,27 @@ a {
   box-sizing: border-box;
 }
 
+
 @tailwind base;
 
 @layer base {
   body {
-    @apply bg-slate-50
+    @apply bg-slate-50 
   }
 }
 
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
+@layer components {
   .wrapper {
     @apply bg-white p-4 rounded-md border
   }
+
   .link {
     @apply hover:border-b hover:border-b-blue-400 text-blue-400 cursor-pointer transition-all duration-200
   }
+
   .light-link {
     @apply hover:border-b hover:border-b-blue-400 hover:text-blue-400 cursor-pointer transition-all duration-200
   }
@@ -49,11 +56,7 @@ a {
   background: #555;
 }
 
-@import './grid.css';
-
-
 .incubator-child:nth-child(6n) {
   background-color: chartreuse;
 }
 
-@import './preflight.css';

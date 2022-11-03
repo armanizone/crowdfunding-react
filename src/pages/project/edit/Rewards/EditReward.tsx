@@ -8,6 +8,9 @@ import { db } from '../../../../utils/firebase'
 import { getImage, uploadImage } from '../../../../service/StorageService'
 import { useParams } from 'react-router-dom'
 
+import 'dayjs/locale/ru';
+
+
 
 function EditReward({editReward, editModal, setEditModal}: any) {
 
@@ -246,6 +249,7 @@ function EditReward({editReward, editModal, setEditModal}: any) {
           placeholder="Не более 50 символов"
           required
           variant="unstyled"
+          locale='ru'
         />
       </CreateLabel>
       <div className='flex items-center justify-between gap-x-4 mt-4'>

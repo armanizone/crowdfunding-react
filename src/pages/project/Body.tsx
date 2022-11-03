@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Comments from './Comments'
 import Description from './Description'
 import Faq from './Faq'
-import Fee from './Fee'
 import Incubator from './Incubator'
 import Rating from './Rating'
 
@@ -26,8 +25,7 @@ function Body({project, projectId}: any) {
   const handleTab = (value: string) => {
     navigate(value)
   }
-
-
+  
   return (
     <div className='rounded-md w-full'>
       <Tabs

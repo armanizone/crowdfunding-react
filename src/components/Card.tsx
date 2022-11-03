@@ -12,7 +12,7 @@ interface CardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDiv
 }
 
 const styles = {
-  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden bg-white'
+  wrapper: 'rounded-md border border-slate-200 relative overflow-hidden bg-white fadeup-animation'
 }
 
 function Card({project, type, recomended, className, ...props}: CardProps): JSX.Element {
@@ -37,14 +37,14 @@ function Card({project, type, recomended, className, ...props}: CardProps): JSX.
       <h2 className='text-base font-semibold'>{project?.title}</h2>
       <p className='text-slate-500 text-[15px]'>{project?.description}</p>
     </div>
-    <div className='p-5'>
+    <div className='p-4'>
       <div className="success_form">
         <div className="text-xs text-blue-400 mb-4">
           {project?.category}
         </div>
         <div className="flex justify-between items-end mb1">
           <div className="">
-            <span className="text-sm mr-1.5">1375</span>
+            <span className="text-sm mr-1.5">{project?.earned}</span>
             <span className="text-xs text-slate-500">ед.</span>
           </div>
           <div>
@@ -55,15 +55,20 @@ function Card({project, type, recomended, className, ...props}: CardProps): JSX.
         <div className='form_bar'>
           <Progress value={50} />
         </div>
+        
+        {project?.duration && (
+          <div className="mt-7 flex items-center">
+            <p className="text-xl text-slate-500 mr-1.5">
+              <IoTime />
+            </p>
+            <p className="text-xs text-slate-500">
+              <span>
+                {project?.duration ?? 0}
+              </span> день/дней осталось
+            </p>
+          </div>
+        )}
 
-        <div className="mt-7 flex items-center">
-          <span className="text-xl text-slate-500 mr-1.5">
-            <IoTime />
-          </span>
-          <span className="text-xs text-slate-500">
-            {isNaN(23) ? project?.duration : 23} день/дней осталось
-          </span>
-        </div>
       </div>
     </div>
   </div>

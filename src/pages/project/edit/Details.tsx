@@ -92,7 +92,7 @@ function Details({ details, id }: EditProjectProps) {
           />
         </CreateLabel>
       </div>
-      <CreateButtons loading={loading.save} back='/edit' forward='/edit/rewards' callback={updateProject} />
+      <CreateButtons loading={loading.save} back='/edit' forward='/edit/rewards' callback={updateProject}/>
     </div>
   )
 }

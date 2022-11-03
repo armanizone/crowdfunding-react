@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from '@mantine/core'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import Investions from './Investions'
 import MyProjects from '../profile/projects'
@@ -11,7 +11,7 @@ import { Load, UserBar } from '../../components'
 
 function Profile() {
   
-  const {user, loading} = useAuth()
+  const {loading} = useAuth()
 
   const location = useLocation().pathname
   const navigate = useNavigate()

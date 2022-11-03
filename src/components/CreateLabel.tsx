@@ -39,7 +39,7 @@ function CreateLabel({ children, label, tooltip, description, className, ...prop
                 width={280}
                 transition="fade"
                 transitionDuration={200}
-                color={'gray'}
+                color={'black'}
               >
                 <span className={styles.labelIcon}>
                   <CgDanger />

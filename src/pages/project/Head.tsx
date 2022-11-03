@@ -1,7 +1,10 @@
-import { Avatar, Button, Progress } from '@mantine/core'
 import React from 'react'
+import { Avatar, Button, Progress } from '@mantine/core'
 
 function Head({project}: any) {
+
+  const author = project?.user
+
   return (
     <div className='w-full grid grid-cols-1 md:grid-cols-[grid-cols-[auto_450px]] 2xl:grid-cols-[auto_550px] lg:grid-cols-[auto_450px] gap-4 rounded-lg'>
       <div className='w-full'>
@@ -32,9 +35,9 @@ function Head({project}: any) {
           </p>
         </div>
         <div className='flex pl-3 mb-7'>
-          <Avatar src={project?.image} alt="" radius="xl" size={50} />
+          <Avatar src={author?.photoURL} alt="" radius="xl" size={50} />
           <div className='ml-3'>
-            <p className='font-head font-medium'>{project?.user?.name ?? 'Имя автора проекта'}</p>
+            <p className='font-head font-medium'>{author?.displayName ?? 'Имя автора проекта'}</p>
             <p className='text-slate-600'>
               Автор проекта
             </p>
@@ -52,13 +55,13 @@ function Head({project}: any) {
             </div>
           </div>
           <Progress
-            value={50}
+            value={Math.round(Math.random() * 100)}
             size="lg"
             className="my-2"
           />
           <div className="flex justify-between ">
             <div className="goal">
-              <span className="text-slate-500">{isNaN(50) ? 0 : 50}% из <span className="link text-black text-lg font-medium">{project?.golad}</span> </span>
+              <span className="text-slate-500">{isNaN(50) ? 0 : 50}% из <span className="link text-black text-lg font-medium">{project?.goal}</span> </span>
               <span className="text-slate-500">ед.</span>
             </div>
             <div className="lasted">

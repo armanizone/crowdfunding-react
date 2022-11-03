@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom'
 import next from '../../assets/images/next.png'
 import ExploreMenu from './ExploreMenu'
 import UserMenu from './UserMenu'
-import useAuth from '../../hooks/useAuth'
 
 export const styles = {
   nav: 'hidden md:flex items-center gap-x-4 lg:gap-x-8',
@@ -21,8 +20,6 @@ function Header() {
 
   const [opened, setOpened] = React.useState(false)
   const [profile, setProfile] = React.useState(false)
-
-  const {user} = useAuth()
 
   const location = useLocation().pathname
 
