@@ -1,17 +1,32 @@
 import React from 'react'
 import { TextInput } from '@mantine/core'
-import { EditProjectProps, styles } from '../../../pages/project/edit'
+import { styles } from '../../../pages/project/edit'
 import { CreateButtons, CreateLabel, FileInput } from '../../../components'
+// import { useParams } from 'react-router-dom'
 
-function Verification({project, id}: EditProjectProps) {
+function Verification() {
+
+  // const { id } = useParams()
 
   const [verification, setVerification] = React.useState({
     name: '',
     phone: '',
     iin: '',
+    front: null,
+    back: null,
   })
 
+  const handleInput = (e: any) => {
+    const {name, value} = e.target
+    setVerification({...verification, [name]: value})
+  }
+
+  const handleFiles = (e: any) => {
+    
+  }
+
   const toModeration = () => {
+
   }
 
   return (
@@ -20,7 +35,7 @@ function Verification({project, id}: EditProjectProps) {
         <div className='mb-4'>
           <p>Нам нужно верифицировать лицо, которое будет выступать организатором проекта.</p>
         </div>
-        <CreateLabel label='Контрагент'>
+        <CreateLabel label='Автор проекта'>
           <TextInput
             classNames={{
               error: styles.error,
@@ -29,10 +44,11 @@ function Verification({project, id}: EditProjectProps) {
             px={16}
             size='md'
             placeholder='Инициалы автора'
-            type="text"
-            name="title"
             required
             variant="unstyled"
+            value={verification.name}
+            onChange={handleInput}
+            name='name'
           />
         </CreateLabel>
         <CreateLabel label='Номер'>
@@ -44,10 +60,11 @@ function Verification({project, id}: EditProjectProps) {
             px={16}
             size='md'
             placeholder="Введите номер"
-            type="text"
-            name="title"
             required
             variant="unstyled"
+            value={verification.phone}
+            onChange={handleInput}
+            name='phone'
           />
         </CreateLabel>
         <CreateLabel label='ИИН' >
@@ -59,10 +76,11 @@ function Verification({project, id}: EditProjectProps) {
             px={16}
             size='md'
             placeholder="Введите номер"
-            type="text"
-            name="title"
             required
             variant="unstyled"
+            value={verification.iin}
+            onChange={handleInput}
+            name='iin'
           />
         </CreateLabel>
         <CreateLabel label='Удостоверение личности' className='border-b'>
@@ -73,6 +91,9 @@ function Verification({project, id}: EditProjectProps) {
                 compact: true, 
                 variant: 'outline',
               }}
+              inputProps={{
+              }}
+              name='front'
             />
             <FileInput 
               label='Обратная сторона'
@@ -80,6 +101,9 @@ function Verification({project, id}: EditProjectProps) {
                 compact: true, 
                 variant: 'outline',
               }}
+              inputProps={{
+              }}
+              name='back'
             />
           </div>
         </CreateLabel>
@@ -87,7 +111,6 @@ function Verification({project, id}: EditProjectProps) {
       <CreateButtons 
         back='/edit/rewards'
         toModeration={toModeration}
-        projectId={id as string}
        />
     </div>
   )

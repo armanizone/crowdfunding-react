@@ -33,7 +33,6 @@ function Fee({rewards, projectId}: any) {
             <Reward
               key={index}
               reward={item}
-              index={index}
               style={{ animationDelay: `${((index + 1) * 150)}ms` }}
             />
           )

@@ -5,16 +5,14 @@ import { IReward } from '../types/types'
 import dayjs from 'dayjs'
 interface RewardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   reward: IReward,
-  index?: number,
 }
 
-function Reward({ reward, index, className, ...props }: RewardProps): JSX.Element {
+function Reward({ reward, className, ...props }: RewardProps): JSX.Element {
 
   const sending = dayjs(new Date()).locale('ru').format('MMMM D, YYYY')
 
   return (
     <div
-    data-count={(index ?? 1) + 1}
       className={cn(className, 'p-3 md:p-4 rounded-md border relative bg-white overflow-hidden fadeup-animation')}
       {...props}
     >

@@ -11,16 +11,16 @@ interface CreateButtonsProps extends React.DetailedHTMLProps<React.HTMLAttribute
   forward?: string,
   incubator?: boolean,
   callback?: () => void,
-  projectId?: string 
   loading?: boolean,
   toModeration?: () => void,
 }
 
-function CreateButtons({ back, forward, callback, toModeration, incubator, loading, projectId, className, ...props}: CreateButtonsProps) {
+function CreateButtons({ back, forward, callback, toModeration, incubator, loading, className, ...props}: CreateButtonsProps) {
 
   const { handleTabChange, project } = React.useContext(EditProjectContext)
 
   const [preview, setPreview] = React.useState(false)
+
 
   return (
     <>
@@ -43,22 +43,23 @@ function CreateButtons({ back, forward, callback, toModeration, incubator, loadi
           >
             Предпросмотр
           </Button>
-          <Button
-            size='sm'
-            variant='filled'
-            onClick={callback}
-            loading={loading}
-            
-          >
-            Сохранить
-          </Button>
+          {callback && (
+            <Button
+              size='sm'
+              variant='filled'
+              onClick={callback}
+              loading={loading}
+            >
+              Сохранить
+            </Button>
+          )}
         </div>
         {forward ?
           <Button
             size='sm'
             onClick={() => handleTabChange(forward)}
             variant='light'
-            >
+          >
             Продолжить
           </Button>
           :

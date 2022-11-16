@@ -57,7 +57,7 @@ const ProjectContent = ({project, rewards, projectId, author}: any) => {
               <div className='grid grid-cols-1 sm:grid-col-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                 {rewards?.map((item: any, i: number) => {
                   return (
-                    <Reward reward={item} key={i} index={i} style={{animationDelay: `${((i + 1) * 150)}ms` }}/>
+                    <Reward reward={item} key={i} style={{animationDelay: `${((i + 1) * 150)}ms` }}/>
                   )
                 })}
               </div>

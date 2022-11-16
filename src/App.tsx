@@ -22,7 +22,7 @@ import EditProject from './pages/project/edit';
 import Details from './pages/project/edit/Details';
 import Incubator from './pages/project/edit/Incubator';
 import Main from './pages/project/edit/Main';
-import Rewards from './pages/project/edit/Rewards/Rewards';
+import Rewards from './pages/project/edit/Rewards';
 import Verification from './pages/project/edit/Verification';
 import Settings from './pages/profile/settings';
 import Draft from './pages/profile/projects/Draft';

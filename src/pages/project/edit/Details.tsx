@@ -10,8 +10,11 @@ import { RichTextEditor } from '@mantine/rte';
 import { getImage, uploadImage } from '../../../service/StorageService'
 import { randomId } from '@mantine/hooks'
 import Compressor from 'compressorjs';
+import { useParams } from 'react-router-dom'
 
-function Details({ details, id }: EditProjectProps) {
+function Details({ details }: EditProjectProps) {
+
+  const { id } = useParams()
 
   const [value, setValue] = React.useState(details ?? '<p></p>');
 

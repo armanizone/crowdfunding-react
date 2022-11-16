@@ -39,6 +39,7 @@ function Welcome() {
       uid: user?.uid,
       user: {
         displayName: user.displayName,
+        email: user.email,
         photoURL: user.photoURL,
         uid: user.uid, 
       },

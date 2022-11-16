@@ -1,11 +1,11 @@
 import React from 'react'
 import { Loader, Tabs } from '@mantine/core';
-import { IProject, IReward } from '../../../types/types';
+import { IReward } from '../../../types/types';
 import useAuth from '../../../hooks/useAuth';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Main from './Main';
 import Details from './Details';
-import Rewards from './Rewards/Rewards';
+import Rewards from './Rewards';
 import Verification from './Verification';
 
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
@@ -13,8 +13,6 @@ import { collection, doc, query, where } from 'firebase/firestore';
 import { db } from '../../../utils/firebase';
 import Incubator from './Incubator';
 export interface EditProjectProps {
-  project?: IProject,
-  id?: string | null, 
   details?: string,
   loadin?: boolean,
   rewards?: IReward[],
@@ -29,15 +27,17 @@ export const styles = {
   checkField: 'flex flex-col w-full',
   checkLabel: 'p-4',
   error: 'text-xs'
-}
+} 
 interface EditProjectContextProps {
   handleTabChange: (value: string | null) => void,
-  project: any
+  project: any,
+  rewards: IReward[] | any
 }
 
 const defaultValue: EditProjectContextProps = {
   handleTabChange: () => {},
-  project: {}
+  project: {},
+  rewards: []
 }
 
 export const EditProjectContext = React.createContext<EditProjectContextProps>(defaultValue)
@@ -55,8 +55,8 @@ function EditProject() {
   const [pData, pLoading, pError  ]  = useDocumentData(doc(db, 'projects', id as string))
   const [rData, rLoading, rError] = useCollectionData(query(collection(db, 'rewards'), where('project_id', '==', id)))
 
-  const [project, setProject] = React.useState<IProject | undefined>({})
-  const [rewards, setRewards] = React.useState<any[] | undefined> ([])
+  const [project, setProject] = React.useState<any>({})
+  const [rewards, setRewards] = React.useState<any>([])
 
   React.useEffect(() => {
     setProject(pData)
@@ -101,7 +101,7 @@ function EditProject() {
     <div className='w-full box-border'>
       <div className="container">
         <div className='w-full'>
-          <EditProjectContext.Provider value={{handleTabChange, project}}>
+          <EditProjectContext.Provider value={{handleTabChange, project, rewards}}>
             <Tabs
               value={tabValue}
               onTabChange={(value) => handleTabChange(value)}
@@ -120,31 +120,19 @@ function EditProject() {
                 <Tabs.Tab value='/edit/incubator'>Бизнес-инкубатор</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value='/edit' pt='md'>
-                <Main
-                  project={project}
-                  id={id as string}
-                  rewardsCount={rewards?.length}
-                />
+                <Main/>
               </Tabs.Panel>
               <Tabs.Panel value='/edit/details' pt='md'>
                 <Details
                   details={pData?.detail_description}
-                  id={id as string}
                   loadin={pLoading}
                 />
               </Tabs.Panel>
               <Tabs.Panel value='/edit/rewards' pt='md'>
-                <Rewards
-                  project={project}
-                  id={id as string}
-                  rewards={rewards}
-                />
+                <Rewards/>
               </Tabs.Panel>
               <Tabs.Panel value='/edit/verification' pt='md'>
-                <Verification
-                  project={project}
-                  id={id as string}
-                /> 
+                <Verification/> 
               </Tabs.Panel>
               <Tabs.Panel value='/edit/incubator' pt='md'>
                   <Incubator

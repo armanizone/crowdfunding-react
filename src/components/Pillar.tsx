@@ -15,7 +15,7 @@ import { BsEye } from 'react-icons/bs'
 import PreviewProjectModal from './PreviewProjectModal'
 interface PillarProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   project: IProject,
-  type?: 'draft' | 'active' | 'closed' | 'moderation',
+  type: 'draft' | 'active' | 'closed' | 'moderation',
 }
 
 function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element {
@@ -38,7 +38,6 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
     labels: {confirm: 'Да', cancel: 'Отменить'},
     onConfirm: () => deleteTrack()
   }) 
-
 
   const [preview, setPreview] = React.useState(false)
 
@@ -169,7 +168,11 @@ function Pillar({ project, type, className, ...props }: PillarProps):JSX.Element
           </div>
         </div>
       </div>
-      <PreviewProjectModal preview={preview} setPreview={setPreview} project={project} />
+      <PreviewProjectModal 
+        preview={preview} 
+        setPreview={setPreview} 
+        project={project} 
+      />
     </>
   )
 }

@@ -1,43 +1,55 @@
 import React from 'react'
 import { Button, LoadingOverlay, NumberInput, Select, Textarea, TextInput } from '@mantine/core'
-import { EditProjectProps, styles } from '../../../pages/project/edit'
+import { EditProjectContext, styles } from '../../../pages/project/edit'
 import { cities } from '../../../utils/db'
 
-import { CreateLabel, CreateButtons, Card, FileInput} from '../../../components'
+import { CreateLabel, CreateButtons, Card, FileInput } from '../../../components'
 import ProjectService from '../../../service/ProjectService'
 import { getImage, uploadImage } from '../../../service/StorageService'
 import Compressor from 'compressorjs'
 import useAuth from '../../../hooks/useAuth'
 import { projectSchema } from '../../../utils/validation'
+import { useParams } from 'react-router-dom'
+import { useDebouncedState } from '@mantine/hooks'
 
-function Main({project, id}: EditProjectProps) {
+function Main() {
 
-  const {user} = useAuth()
+  const { user } = useAuth()
+
+  const {id} = useParams()
+
+  const {project} = React.useContext(EditProjectContext)
 
   const [proj, setProj] = React.useState(project)
-  
+  const [previewProj, setPreviewProj] = useDebouncedState(project, 800)
+
   React.useEffect(() => {
     setProj(project)
   }, [project])
 
+  React.useEffect(() => {
+    setPreviewProj(proj)
+    // eslint-disable-next-line
+  }, [proj])
+
   const [image, setImage] = React.useState<File | null>(null)
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e?.target?.files?.[0]) return 
+    if (!e?.target?.files?.[0]) return
     setImage(e?.target?.files[0])
-    setProj({ ...proj, image: URL.createObjectURL(e?.target?.files[0])})
+    setProj({ ...proj, image: URL.createObjectURL(e?.target?.files[0]) })
   }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | null, name?: any, val?: any) => {
     if (e?.target) {
       const { name, value } = e.target
-      setErrors({...errors, [name]: []})
-      if (parseInt(value)) return setProj({...proj, [name]: parseInt(value) })
-      setProj({ ...proj, [name]: value})
+      setErrors({ ...errors, [name]: [] })
+      if (parseInt(value)) return setProj({ ...proj, [name]: parseInt(value) })
+      setProj({ ...proj, [name]: value })
       return
-    } 
-    setProj({...proj, [name]: val})
-    setErrors({...errors, [name]: []})
+    }
+    setProj({ ...proj, [name]: val })
+    setErrors({ ...errors, [name]: [] })
   }
 
   const [loading, setLoading] = React.useState({
@@ -48,8 +60,6 @@ function Main({project, id}: EditProjectProps) {
     setLoading({ ...loading, [name]: value })
   }
 
-  console.log(proj);
-  
 
   const yupErrorToErrorObject = (err: any) => {
     const object: any[] = [];
@@ -74,58 +84,57 @@ function Main({project, id}: EditProjectProps) {
     handleLoading('save', true)
     await projectSchema.validate({
       ...proj
-    }, {abortEarly: false})
-    .then(() => {
-      handleLoading('save', false)
-      console.log('asd');
-    })
-    .catch((err) => {
-      yupErrorToErrorObject(err)
-      handleLoading('save', false)
+    }, { abortEarly: false })
+      .then(async () => {
+        if (image) {
+          new Compressor(image, {
+            quality: 0.6,
+            async success(file) {
+              await uploadImage(`projects/${id}/main-img`, file)
+                .then(() => {
+                  getImage(`projects/${id}/main-img`)
+                    .then(async e => {
+                      await ProjectService.updateProject(id as string, {
+                        ...proj,
+                        image: e,
+                        user: {
+                          displayName: user?.displayName,
+                          photoURL: user?.photoURL,
+                        },
+                      })
+                    })
+                    .finally(() => handleLoading('save', false))
+                })
+            },
+          })
+          return
+        }
+        await ProjectService.updateProject(id as string, {
+          ...proj,
+          user: {
+            displayName: user?.displayName,
+            photoURL: user?.photoURL,
+          },
+        })
+          .finally(() => handleLoading('save', false))
+        handleLoading('save', false)
+        
+      })
+      .catch((err) => {
+        yupErrorToErrorObject(err)
+        handleLoading('save', false)
 
-    })
-
-    console.log(errors);
-    
-    // if (image) {
-    //   new Compressor (image, {  
-    //     quality: 0.6, 
-    //     async success(file) {          
-    //       await uploadImage(`projects/${id}/main-img`, file)
-    //       .then(() => {
-    //         getImage(`projects/${id}/main-img`)
-    //         .then(async e => {
-    //           await ProjectService.updateProject(id as string, {
-    //             ...proj,
-    //             image: e,
-    //             user: {
-    //               displayName: user?.displayName,
-    //               photoURL: user?.photoURL,
-    //             },
-    //           })
-    //         })
-    //         .finally(() => handleLoading('save', false))
-    //       })
-    //     },
-    //   })
-    //   return
-    // } 
-    // await ProjectService.updateProject(id as string, {
-    //   ...proj,
-    //   user: {
-    //     displayName: user?.displayName,
-    //     photoURL: user?.photoURL,
-    //   },
-    // })
-    // .finally(() => handleLoading('save', false))
+      })
   }
+
+  
   return (
     <div>
       <div className={styles.row}>
         <div className='wrapper'>
           <LoadingOverlay visible={loading.save} />
-          <CreateLabel 
-            label='Название проекта' 
+          <CreateLabel
+            label='Название проекта'
             tooltip='Заголовок который будет представлять ваш проект (обязательное поле)'
           >
             <TextInput
@@ -149,15 +158,15 @@ function Main({project, id}: EditProjectProps) {
               Осталось {50 - (proj?.title?.length! ?? 0)} символов
             </div>
           </CreateLabel>
-          <CreateLabel 
-            label='Изображение проекта' 
+          <CreateLabel
+            label='Изображение проекта'
             tooltip='Рекомендуемое изображение (16:9)'
           >
             <div className='p-4 flex gap-4'>
               {proj?.image && (
-                <img 
-                  src={proj?.image ?? project?.image} 
-                  alt="" 
+                <img
+                  src={proj?.image ?? project?.image}
+                  alt=""
                   className='w-40 object-contain'
                 />
               )}
@@ -175,7 +184,7 @@ function Main({project, id}: EditProjectProps) {
                   />
                 )}
                 {proj?.image && (
-                  <Button 
+                  <Button
                     compact
                     color={'red'}
                     variant='subtle'
@@ -184,7 +193,7 @@ function Main({project, id}: EditProjectProps) {
                     }}
                     onClick={() => {
                       setImage(null)
-                      setProj({...proj, image: null})
+                      setProj({ ...proj, image: null })
                     }}
                   >
                     Удалить
@@ -194,8 +203,8 @@ function Main({project, id}: EditProjectProps) {
             </div>
           </CreateLabel>
           <CreateLabel
-            label='Коротко о проекте' 
-            tooltip='Вкратце опишите что представляет ваш проект (обязательное поле)'  
+            label='Коротко о проекте'
+            tooltip='Вкратце опишите что представляет ваш проект (обязательное поле)'
           >
             <Textarea
               name='description'
@@ -216,8 +225,8 @@ function Main({project, id}: EditProjectProps) {
               Осталось {180 - (proj?.description?.length! ?? 0)} символов
             </div>
           </CreateLabel>
-          <CreateLabel 
-            label='Город проекта' 
+          <CreateLabel
+            label='Город проекта'
             tooltip='Укажите город реализации проекта'
           >
             <Select
@@ -226,7 +235,7 @@ function Main({project, id}: EditProjectProps) {
               placeholder='Введите город'
               name="city"
               value={proj?.city}
-              onChange={(e) => setProj({...proj, city: e})}
+              onChange={(e) => setProj({ ...proj, city: e })}
               data={cities}
               py={6}
               px={16}
@@ -238,8 +247,8 @@ function Main({project, id}: EditProjectProps) {
             // disabled={posted}
             />
           </CreateLabel>
-          <CreateLabel 
-            label='Сумма сбора' 
+          <CreateLabel
+            label='Сумма сбора'
             tooltip='Сумма которую необходимо достичь за время длительности проекта (обязательное поле)'
           >
             <TextInput
@@ -256,7 +265,7 @@ function Main({project, id}: EditProjectProps) {
             // disabled={posted}
             />
           </CreateLabel>
-          <CreateLabel 
+          <CreateLabel
             label='Длительность проекта'
             tooltip='Длительность указана в днях (в среднем проекты длятся 30 дней, минимум 15, максимум 120 дней)'
             className='border-b'
@@ -264,7 +273,7 @@ function Main({project, id}: EditProjectProps) {
             <NumberInput
               placeholder='Количество дней после запуска проекта'
               name="duration"
-              value={proj?.duration ?? Number('')}
+              value={proj?.duration ?? 15}
               onChange={(e) => handleInput(null, 'duration', e)}
               py={6}
               px={16}
@@ -277,16 +286,15 @@ function Main({project, id}: EditProjectProps) {
           </CreateLabel>
         </div>
         <div className='wrapper'>
-          <Card 
-            project={proj}
+          <Card
+            project={previewProj}
           />
         </div>
       </div>
-      <CreateButtons 
-        loading={loading.save} 
-        forward='/edit/details' 
+      <CreateButtons
+        loading={loading.save}
+        forward='/edit/details'
         callback={updateProject}
-        projectId={id as string}
       />
     </div>
   )

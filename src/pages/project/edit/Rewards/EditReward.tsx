@@ -10,8 +10,6 @@ import { useParams } from 'react-router-dom'
 
 import 'dayjs/locale/ru';
 
-
-
 function EditReward({editReward, editModal, setEditModal}: any) {
 
   const { id } = useParams()
