@@ -31,7 +31,7 @@ function Search({ matches }: { matches: boolean}) {
         <div>
           <Breadcrumbs>
             {items.map((item: any, i: number) => {
-              return <div className='text-[15px] text-blue-400 underline' key={i}>{item.title}</div>
+              return <div className='text-sm text-blue-400 underline' key={i}>{item.title}</div>
             })}
           </Breadcrumbs>
         </div>

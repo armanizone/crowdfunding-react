@@ -31,7 +31,7 @@ function Card({project, type, recomended, className, ...props}: CardProps): JSX.
     </div>
       <div className='p-4 space-y-3 grow'>
         <h2 className='text-base font-semibold'>{project?.title ?? 'Название проекта'}</h2>
-        <p className='text-slate-500 text-[15px]'>{project?.description ?? 'Описание проекта'}</p>
+        <p className='text-slate-700 text-[15px]'>{project?.description ?? 'Описание проекта'}</p>
       </div>
       <div className='px-4 pb-4 shrink'>
           <div className="text-xs text-blue-400 mb-4">

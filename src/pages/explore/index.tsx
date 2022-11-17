@@ -1,5 +1,5 @@
 import React from 'react'
-import { collection, query } from 'firebase/firestore'
+import { collection, query, where } from 'firebase/firestore'
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 import { Card } from '../../components'
 import { IProject } from '../../types/types'
@@ -11,7 +11,9 @@ import { useMediaQuery } from '@mantine/hooks';
 
 function Explore() {
 
-  const [values] = useCollectionDataOnce(query(collection(db, 'projects')))
+  const [values] = useCollectionDataOnce(query(collection(db, 'projects'), 
+  // where('status', '!=', 'created')
+  ))
 
   const items = values as IProject[]
 

@@ -5,7 +5,7 @@ import { cities } from '../../../utils/db'
 
 import { CreateLabel, CreateButtons, Card, FileInput } from '../../../components'
 import ProjectService from '../../../service/ProjectService'
-import { getImage, uploadImage } from '../../../service/StorageService'
+import { uploadAndGetImage } from '../../../service/StorageService'
 import Compressor from 'compressorjs'
 import useAuth from '../../../hooks/useAuth'
 import { projectSchema } from '../../../utils/validation'
@@ -90,28 +90,25 @@ function Main() {
           new Compressor(image, {
             quality: 0.6,
             async success(file) {
-              await uploadImage(`projects/${id}/main-img`, file)
-                .then(() => {
-                  getImage(`projects/${id}/main-img`)
-                    .then(async e => {
-                      await ProjectService.updateProject(id as string, {
-                        ...proj,
-                        image: e,
-                        user: {
-                          displayName: user?.displayName,
-                          photoURL: user?.photoURL,
-                        },
-                      })
-                    })
-                    .finally(() => handleLoading('save', false))
+              await uploadAndGetImage(`projects/${id}/main-img`, file)
+              .then(async (e) => {
+                await ProjectService.updateProject(id as string, {
+                  ...proj,
+                  image: e,
+                  author: {
+                    displayName: user?.displayName,
+                    photoURL: user?.photoURL,
+                  },
                 })
+                .finally(() => handleLoading('save', false))
+              })
             },
           })
           return
         }
         await ProjectService.updateProject(id as string, {
           ...proj,
-          user: {
+          author: {
             displayName: user?.displayName,
             photoURL: user?.photoURL,
           },
@@ -267,7 +264,7 @@ function Main() {
           </CreateLabel>
           <CreateLabel
             label='Длительность проекта'
-            tooltip='Длительность указана в днях (в среднем проекты длятся 30 дней, минимум 15, максимум 120 дней)'
+            tooltip='Длительность указана в днях (минимум 15, максимум 120 дней)'
             className='border-b'
           >
             <NumberInput

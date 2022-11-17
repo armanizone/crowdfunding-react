@@ -37,7 +37,7 @@ function Project({projectId, projectData}: any) {
 
 }
 
-const ProjectContent = ({project, rewards, projectId, author}: any) => {
+const ProjectContent = ({project, rewards, projectId}: any) => {
 
   const location = useLocation().pathname
 

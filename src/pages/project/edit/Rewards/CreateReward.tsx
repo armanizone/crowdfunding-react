@@ -4,7 +4,7 @@ import { CreateLabel, FileInput } from '../../../../components'
 import useAuth from '../../../../hooks/useAuth'
 import { randomId } from '@mantine/hooks'
 import { useParams } from 'react-router-dom'
-import { getImage, uploadImage } from '../../../../service/StorageService'
+import { uploadAndGetImage } from '../../../../service/StorageService'
 import RewardService from '../../../../service/RewardService'
 import { rewardSchema } from '../../../../utils/validation'
 import { showNotification } from '@mantine/notifications'
@@ -107,49 +107,45 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
       .then(async () => {
         if (image) {
           const url = `/rewards/${rewardId}/main-img`
-          await uploadImage(url, image!)
-            .then(() => {
-              getImage(url)
-                .then(async e => {
-                  RewardService.createReward(rewardId as string, {
-                    ...reward,
-                    uid: project?.uid,
-                    project_id: id,
-                    image: e,
-                    id: rewardId,
-                  })
-                    .then(async e => {
-                      setReward({
-                        title: '',
-                        description: '',
-                        how_to_get: '',
-                        image: '',
-                        cost: 0,
-                        count: 0,
-                        bought: 0,
-                        sending: new Date(),
-                      })
-
-                      await ProjectService.updateProject(id as string, {
-                        rewards: increment(1),
-                        user: {
-                          displayName: user?.displayName,
-                          photoURL: user?.photoURL,
-                        },
-                      })
-                      showNotification({
-                        title: 'Вознаграждение',
-                        message: 'Вознаграждение успешно создано!',
-                        color: 'green',
-                        autoClose: 3000
-                      })
-                    })
+          await uploadAndGetImage(url, image)
+          .then((e) => {
+            RewardService.createReward(rewardId as string, {
+              ...reward,
+              uid: project?.uid,
+              project_id: id,
+              image: e,
+              id: rewardId,
+            })
+              .then(async e => {
+                setReward({
+                  title: '',
+                  description: '',
+                  how_to_get: '',
+                  image: '',
+                  cost: 0,
+                  count: 0,
+                  bought: 0,
+                  sending: new Date(),
                 })
-            })
-            .finally(() => {
-              handleLoading(false)
-              handleRewardLoading(false)
-            })
+                await ProjectService.updateProject(id as string, {
+                  rewards: increment(1),
+                  user: {
+                    displayName: user?.displayName,
+                    photoURL: user?.photoURL,
+                  },
+                })
+                showNotification({
+                  title: 'Вознаграждение',
+                  message: 'Вознаграждение успешно создано!',
+                  color: 'green',
+                  autoClose: 3000
+                })
+              })
+              .finally(() => {
+                handleLoading(false)
+                handleRewardLoading(false)
+              })
+          })   
           return
         }
         RewardService.createReward(rewardId as string, {
