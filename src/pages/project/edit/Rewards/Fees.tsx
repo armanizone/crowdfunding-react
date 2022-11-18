@@ -5,16 +5,13 @@ import { deleteObject, ref } from 'firebase/storage'
 import { Reward } from '../../../../components'
 import { IReward } from '../../../../types/types'
 import { db, storage } from '../../../../utils/firebase'
-import { useParams } from 'react-router-dom'
 import { deleteDoc, doc, increment, updateDoc } from 'firebase/firestore'
 import { showNotification } from '@mantine/notifications'
 import { EditProjectContext } from '..'
 
 function Fees({reward, handleRewardEdit}: any) {
 
-  const { id } = useParams()
-
-  const { rewards } = React.useContext(EditProjectContext)
+  const { rewards, id } = React.useContext(EditProjectContext)
 
   const deleteReward = async (rewardId: string, image: string) => {
     if (image) {

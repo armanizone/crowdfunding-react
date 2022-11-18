@@ -43,7 +43,7 @@ function Header() {
           <nav className={styles.nav}>
             <ExploreMenu/>
             <span className='light-link'>
-              <Link to='/'>
+              <Link to='/incubator'>
                 Бизнес-инкубатор
               </Link>
             </span>
@@ -83,7 +83,7 @@ function Header() {
       </div>
       <Collapse in={opened}>
         <nav className='flex flex-col gap-y-3 p-3'>
-          <Link to='/'>Бизнес-Инкубатор</Link>
+          <Link to='/incubator'>Бизнес-Инкубатор</Link>
           <Link to='/explore'>Все проекты</Link>
           <Link to='/explore/collection/active'>Последние обновленные</Link>
           <Link to='/explore/collection/active'>Новые</Link>

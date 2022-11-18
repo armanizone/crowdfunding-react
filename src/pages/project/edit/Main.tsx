@@ -9,16 +9,13 @@ import { uploadAndGetImage } from '../../../service/StorageService'
 import Compressor from 'compressorjs'
 import useAuth from '../../../hooks/useAuth'
 import { projectSchema } from '../../../utils/validation'
-import { useParams } from 'react-router-dom'
 import { useDebouncedState } from '@mantine/hooks'
 
 function Main() {
 
   const { user } = useAuth()
 
-  const {id} = useParams()
-
-  const {project} = React.useContext(EditProjectContext)
+  const {project, id} = React.useContext(EditProjectContext)
 
   const [proj, setProj] = React.useState(project)
   const [previewProj, setPreviewProj] = useDebouncedState(project, 800)
@@ -95,9 +92,11 @@ function Main() {
                 await ProjectService.updateProject(id as string, {
                   ...proj,
                   image: e,
-                  author: {
+                  user: {
                     displayName: user?.displayName,
                     photoURL: user?.photoURL,
+                    uid: user?.uid,
+                    email: user?.email
                   },
                 })
                 .finally(() => handleLoading('save', false))
@@ -108,9 +107,11 @@ function Main() {
         }
         await ProjectService.updateProject(id as string, {
           ...proj,
-          author: {
+          user: {
             displayName: user?.displayName,
             photoURL: user?.photoURL,
+            uid: user?.uid,
+            email: user?.email
           },
         })
           .finally(() => handleLoading('save', false))

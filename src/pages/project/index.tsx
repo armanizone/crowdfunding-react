@@ -5,7 +5,7 @@ import { useCollectionData, useCollectionDataOnce, useDocumentDataOnce } from 'r
 import { db } from '../../utils/firebase'
 import Fee from './Fee'
 import Head from './Head'
-import Body from './Body'
+import Body from './body'
 import { useLocation, useParams } from 'react-router-dom'
 
 function Project({projectId, projectData}: any) {
@@ -23,7 +23,7 @@ function Project({projectId, projectData}: any) {
     return () => {
       document.body.style.backgroundColor = 'rgb(248 250 252)'
     }
-  }, [])
+  }, []) 
 
   if (projectId) return (
     <ProjectContent 

@@ -48,7 +48,6 @@ function Body({project, projectId}: any) {
         </Tabs.List>
         <Tabs.Panel value={`/project/${id}`}>
           <Description project={project}/>
-          {/* <div dangerouslySetInnerHTML={{ __html: project?.detail_description }}></div> */}
         </Tabs.Panel>
         <Tabs.Panel value={`/project/${id}/faq`}>
           <Faq/>

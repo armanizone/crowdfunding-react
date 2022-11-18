@@ -18,7 +18,7 @@ function Head({project}: any) {
           <span className='p-3 text-lg font-head font-medium'>{project?.city}</span>
         </div>
       </div>
-      <div className='flex flex-col h-full p-3 md:p-4 bg-white rounded-lg'>
+      <div className='flex flex-col h-full px-3 md:px-4 bg-white rounded-lg'>
         <div className='mb-2'>
           <span className='uppercase text-green-600 text-xs md:text-sm font-semibold tracking-wide'>
             Идет сбор

@@ -14,3 +14,7 @@
   opacity: 0;
   animation: fadeup 300ms ease-in-out forwards;
 }  
+.fadeup-animation:hover {
+  translate: 0px -10px ;
+  @apply shadow-lg border-sky-200
+}

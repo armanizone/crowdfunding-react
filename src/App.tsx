@@ -31,14 +31,17 @@ import Closed from './pages/profile/projects/Closed';
 import UserData from './pages/profile/settings/UserData';
 import ChangePassword from './pages/profile/settings/ChangePassword';
 
-import Incubator1 from './pages/project/Incubator';
+import Incubator1 from './pages/project/body/Incubator';
 
-import Comments from './pages/project/Comments';
-import Faq from './pages/project/Faq';
-import Rating from './pages/project/Rating';
-import Description from './pages/project/Description';
+import Comments from './pages/project/body/Comments';
+import Faq from './pages/project/body/Faq';
+import Rating from './pages/project/body/Rating'; 
+import Description from './pages/project/body/Description';
+
 import Fee from './pages/project/Fee';
 import AuthModal from './components/AuthModal';
+
+import Incubator3 from './pages/incubator/'
 
 function App() {
 
@@ -57,6 +60,7 @@ function App() {
                 <Route path='programs' element={<Programs/>} />
                 <Route path='projects' element={<Projects/>} />
               </Route>
+              <Route path='/incubator' element={<Incubator3/>} />
               <Route path='/explore'>
                 <Route index element={<Explore/>} />
                 <Route path='collection/:name' element={<Collection/>} />

@@ -15,7 +15,7 @@ function Card({project, type, recomended, className, ...props}: CardProps): JSX.
 
   return (
   <div 
-    className={cn(className, 'flex flex-col relative rounded-md border border-slate-200 overflow-hidden bg-white fadeup-animation')}
+    className={cn(className, 'flex flex-col relative rounded-md border border-slate-200 overflow-hidden bg-white fadeup-animation transition-all duration-150')}
     {...props}
   >
     <div className='relative overflow-hidden'>
@@ -34,34 +34,33 @@ function Card({project, type, recomended, className, ...props}: CardProps): JSX.
         <p className='text-slate-700 text-[15px]'>{project?.description ?? 'Описание проекта'}</p>
       </div>
       <div className='px-4 pb-4 shrink'>
-          <div className="text-xs text-blue-400 mb-4">
-            {project?.category}
+        <div className="text-xs text-blue-400 mb-4">
+          {project?.category}
+        </div>
+        <div className="flex justify-between items-end mb1">
+          <div>
+            <span className="text-sm mr-1.5">{project?.earned}</span>
+            <span className="text-xs text-slate-500">ед.</span>
           </div>
-          <div className="flex justify-between items-end mb1">
-            <div>
-              <span className="text-sm mr-1.5">{project?.earned}</span>
-              <span className="text-xs text-slate-500">ед.</span>
-            </div>
-            <div>
-              <span className="text-slate-500 text-xs" style={{ color: 50 > 100 ? 'rgb(0, 235, 31)' : '' }}>{String(50).substring(0, 4)}%</span>
-            </div>
+          <div>
+            <span className="text-slate-500 text-xs" style={{ color: 50 > 100 ? 'rgb(0, 235, 31)' : '' }}>{String(50).substring(0, 4)}%</span>
           </div>
+        </div>
 
-          <div className='form_bar'>
-            <Progress value={50} />
-          </div>
-          
-            <div className="mt-7 flex items-center">
-              <p className="text-xl text-slate-500 mr-1.5">
-                <IoTime />
-              </p>
-              <p className="text-xs text-slate-500">
-                <span>
-                  {project?.duration ?? 15}
-                </span> день/дней осталось
-              </p>
-            </div>
-
+        <div className='form_bar'>
+          <Progress value={50} />
+        </div>
+      
+        <div className="mt-7 flex items-center">
+          <p className="text-xl text-slate-500 mr-1.5">
+            <IoTime />
+          </p>
+          <p className="text-xs text-slate-500">
+            <span>
+              {project?.duration ?? 15}
+            </span> день/дней осталось
+          </p>
+        </div>
       </div>
   </div>
   )

@@ -12,12 +12,6 @@ import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firesto
 import { collection, doc, query, where } from 'firebase/firestore';
 import { db } from '../../../utils/firebase';
 import Incubator from './Incubator';
-export interface EditProjectProps {
-  details?: string,
-  loadin?: boolean,
-  rewards?: IReward[],
-  rewardsCount?: number 
-}
 
 export const styles = {
   row: 'grid grid-cols-1 lg:grid-cols-[75%_auto] relative gap-4',
@@ -31,13 +25,15 @@ export const styles = {
 interface EditProjectContextProps {
   handleTabChange: (value: string | null) => void,
   project: any,
-  rewards: IReward[] | any
+  rewards: IReward[] | any,
+  id: string | any
 }
 
 const defaultValue: EditProjectContextProps = {
   handleTabChange: () => {},
   project: {},
-  rewards: []
+  rewards: [],
+  id: ''
 }
 
 export const EditProjectContext = React.createContext<EditProjectContextProps>(defaultValue)
@@ -101,7 +97,7 @@ function EditProject() {
     <div className='w-full box-border'>
       <div className="container">
         <div className='w-full'>
-          <EditProjectContext.Provider value={{handleTabChange, project, rewards}}>
+          <EditProjectContext.Provider value={{handleTabChange, project, rewards, id}}>
             <Tabs
               value={tabValue}
               onTabChange={(value) => handleTabChange(value)}
@@ -125,7 +121,6 @@ function EditProject() {
               <Tabs.Panel value='/edit/details' pt='md'>
                 <Details
                   details={pData?.detail_description}
-                  loadin={pLoading}
                 />
               </Tabs.Panel>
               <Tabs.Panel value='/edit/rewards' pt='md'>

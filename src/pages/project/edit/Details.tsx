@@ -1,20 +1,19 @@
 import React from 'react'
 import { LoadingOverlay } from '@mantine/core'
-import { EditProjectProps } from '../../../pages/project/edit'
 
 import { CreateLabel, CreateButtons } from '../../../components'
 
 import ProjectService from '../../../service/ProjectService'
 
 import { RichTextEditor } from '@mantine/rte';
-import { getImage, uploadImage } from '../../../service/StorageService'
+import { uploadAndGetImage } from '../../../service/StorageService'
 import { randomId } from '@mantine/hooks'
 import Compressor from 'compressorjs';
-import { useParams } from 'react-router-dom'
+import { EditProjectContext } from '.';
 
-function Details({ details }: EditProjectProps) {
+function Details({ details }: {details?: string,}) {
 
-  const { id } = useParams()
+  const { id } = React.useContext(EditProjectContext)
 
   const [value, setValue] = React.useState(details ?? '<p></p>');
 
@@ -42,16 +41,13 @@ function Details({ details }: EditProjectProps) {
         quality: 0.6,
         async success(file) {
           const url = `/projects/${id}/details-img-${randomid}`
-          await uploadImage(url, file)
-            .then(async e => {
-              console.log(e);
-              await getImage(url)
-              .then(e => {
-                resolve(e)
-                handleLoading('save', false)
-              })
-              .catch(() => reject(new Error('Upload failed')));
-            })
+          await uploadAndGetImage(url, file)
+          .then((e: any) => {
+            resolve(e)
+            handleLoading('save', false)
+            updateProject()
+          })
+          .catch(() => reject(new Error('Upload failed')));
         },
       })
       // eslint-disable-next-line

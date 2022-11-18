@@ -3,7 +3,6 @@ import { Button, Checkbox, LoadingOverlay, Overlay, Textarea, TextInput } from '
 import { CreateLabel, FileInput } from '../../../../components'
 import useAuth from '../../../../hooks/useAuth'
 import { randomId } from '@mantine/hooks'
-import { useParams } from 'react-router-dom'
 import { uploadAndGetImage } from '../../../../service/StorageService'
 import RewardService from '../../../../service/RewardService'
 import { rewardSchema } from '../../../../utils/validation'
@@ -16,13 +15,11 @@ import { DatePicker } from '@mantine/dates'
 
 import 'dayjs/locale/ru';
 
-function CreateReward({handleReward, handleRewardLoading}: any) {
-
-  const { id } = useParams()
+function CreateReward({ handleReward }: any) {
 
   const { user } = useAuth()
 
-  const {rewards, project} = React.useContext(EditProjectContext)
+  const { project, id } = React.useContext(EditProjectContext)
 
   const [image, setImage] = React.useState<File | null>(null)
 
@@ -36,10 +33,10 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
     if (!e?.target?.files?.[0]) return
     setImage(e?.target?.files[0])
     setReward({ ...reward, image: URL.createObjectURL(e?.target?.files[0]) })
-    handleReward('image', URL.createObjectURL(e?.target?.files[0]) )
+    handleReward('image', URL.createObjectURL(e?.target?.files[0]))
   }
 
-  const [reward, setReward] = React.useState({
+  const [reward, setReward] = React.useState<any>({
     title: '',
     description: '',
     how_to_get: '',
@@ -74,7 +71,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
         setReward({ ...reward, [name]: parseInt(value) })
         handleReward(name, parseInt(value))
         return
-      } 
+      }
       setReward({ ...reward, [name]: value })
       setErrors({ ...errors, [name]: [] })
       handleReward(name, value)
@@ -97,97 +94,57 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
     return setErrors(object);
   }
 
+  const create = async (path?: string) => {
+    await RewardService.createReward(rewardId, {
+      ...reward,
+      uid: project?.uid,
+      project_id: id,
+      image: path ?? null,
+      id: rewardId,
+    })
+    .then(() => {
+      updateRewardCount()
+      showNotification({
+        title: 'Вознаграждение',
+        message: 'Вознаграждение успешно создано!',
+        color: 'green',
+        autoClose: 3000
+      })
+      setReward({})
+    })
+  }
+
+  const updateRewardCount = async () => {
+    await ProjectService.updateProject(id, {
+      rewards: increment(1),
+      "user.displayname": user?.displayName,
+      "photoURL": user?.photoURL
+    })
+  }
 
   const createReward = async () => {
     handleLoading(true)
-    handleRewardLoading(true)
-    await rewardSchema.validate({
-      ...reward
-    }, { abortEarly: false })
-      .then(async () => {
-        if (image) {
-          const url = `/rewards/${rewardId}/main-img`
-          await uploadAndGetImage(url, image)
-          .then((e) => {
-            RewardService.createReward(rewardId as string, {
-              ...reward,
-              uid: project?.uid,
-              project_id: id,
-              image: e,
-              id: rewardId,
-            })
-              .then(async e => {
-                setReward({
-                  title: '',
-                  description: '',
-                  how_to_get: '',
-                  image: '',
-                  cost: 0,
-                  count: 0,
-                  bought: 0,
-                  sending: new Date(),
-                })
-                await ProjectService.updateProject(id as string, {
-                  rewards: increment(1),
-                  user: {
-                    displayName: user?.displayName,
-                    photoURL: user?.photoURL,
-                  },
-                })
-                showNotification({
-                  title: 'Вознаграждение',
-                  message: 'Вознаграждение успешно создано!',
-                  color: 'green',
-                  autoClose: 3000
-                })
-              })
-              .finally(() => {
-                handleLoading(false)
-                handleRewardLoading(false)
-              })
-          })   
-          return
-        }
-        RewardService.createReward(rewardId as string, {
-          ...reward,
-          uid: project?.uid,
-          project_id: id,
-          image: null,
-          id: rewardId,
-        })
-          .then(async e => {
-            setReward({
-              title: '',
-              description: '',
-              how_to_get: '',
-              image: '',
-              cost: 0,
-              count: 0,
-              bought: 0,
-              sending: new Date(),
-            })
-            await ProjectService.updateProject(id as string, {
-              rewards: rewards?.length! + 1 ?? 0,
-            })
-            showNotification({
-              title: 'Вознаграждение',
-              message: 'Вознаграждение успешно создано!',
-              color: 'green',
-              autoClose: 3000
-            })
-          })
+    await rewardSchema.validate({ ...reward }, { abortEarly: false })
+    .then(async () => {
+      if (image) {
+        await uploadAndGetImage(`/rewards/${rewardId}/main-img`, image)
+        .then((e) => {
+          create(e as string)
           .finally(() => {
             handleLoading(false)
-            handleRewardLoading(false)
           })
-        handleLoading(false)
-        handleRewardLoading(false)
+        })
+        return
+      }
+      create()
+      .finally(() => {
+          handleLoading(false)
+        })
       })
-      .catch((err) => {
-        yupErrorToErrorObject(err)
-        handleLoading(false)
-        handleRewardLoading(false)
-      })
+    .catch((err) => {
+      yupErrorToErrorObject(err)
+      handleLoading(false)
+    })
   }
 
   return (
@@ -201,7 +158,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
       </div>
       <CreateLabel label='Название вознаграждения'>
         <TextInput
-          value={reward.title}
+          value={reward.title ?? ''}
           onChange={handleInput}
           name="title"
           classNames={{
@@ -236,7 +193,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
       </CreateLabel>
       <CreateLabel label='Описание вознаграждения'>
         <Textarea
-          value={reward.description}
+          value={reward.description ?? ''}
           onChange={handleInput}
           name='description'
           style={{ border: 'none' }}
@@ -253,7 +210,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
           error={errors.description?.[0]}
         />
         <div className={styles.restInfo}>
-          Осталось {500 - (reward?.description.length! ?? 0)} символов
+          Осталось {500 - (reward?.description?.length! ?? 0)} символов
         </div>
       </CreateLabel>
       <CreateLabel label='Способы получения'>
@@ -262,7 +219,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
             error: styles.error,
             input: 'h-24'
           }}
-          value={reward.how_to_get}
+          value={reward.how_to_get ?? ''}
           onChange={handleInput}
           name='how_to_get'
           py={6}
@@ -274,12 +231,12 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
           maxLength={240}
         />
         <div className={styles.restInfo}>
-          Осталось {240 - (reward?.how_to_get.length! ?? 0)} символов
+          Осталось {240 - (reward?.how_to_get?.length! ?? 0)} символов
         </div>
       </CreateLabel>
       <CreateLabel label='Цена вознаграждения'>
         <TextInput
-          value={reward.cost}
+          value={reward.cost ?? 0}
           onChange={handleInput}
           name='cost'
           classNames={{
@@ -298,7 +255,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
         <div className='flex justify-between'>
           <div className='relative flex-1'>
             <TextInput
-              value={reward.count}
+              value={reward.count ?? 0}
               onChange={handleInput}
               name='count'
               classNames={{
@@ -330,7 +287,7 @@ function CreateReward({handleReward, handleRewardLoading}: any) {
         className='border-b'
       >
         <DatePicker
-          value={reward.sending}
+          value={reward.sending ?? new Date()}
           onChange={(e) => setReward({ ...reward, sending: e! })}
           name='sending'
           classNames={{

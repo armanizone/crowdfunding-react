@@ -2,17 +2,16 @@ import React from 'react'
 import { Button, Checkbox, Modal, Overlay, Textarea, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { CreateLabel, FileInput } from '../../../../components'
-import { styles } from '../../../../pages/project/edit'
+import { EditProjectContext, styles } from '../../../../pages/project/edit'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../../utils/firebase'
-import { getImage, uploadImage } from '../../../../service/StorageService'
-import { useParams } from 'react-router-dom'
+import { uploadAndGetImage } from '../../../../service/StorageService'
 
 import 'dayjs/locale/ru';
 
 function EditReward({editReward, editModal, setEditModal}: any) {
-
-  const { id } = useParams()
+  
+  const { id } = React.useContext(EditProjectContext)
 
   React.useEffect(() => {
     setReward(editReward)
@@ -47,16 +46,11 @@ function EditReward({editReward, editModal, setEditModal}: any) {
   const updateReward = async () => {
     setLoading(true)
     if (image) {
-      const url = `projects/${id}/main-img`
-      await uploadImage(url, image)
-      .then(() => {
-        getImage(url)
-        .then(async e => {
-          await updateDoc(doc(db, 'rewards', reward.id), {
-            ...reward,
-            image: e,
-            
-          })
+      await uploadAndGetImage(`projects/${id}/main-img`, image)
+      .then(async e => {
+        await updateDoc(doc(db, 'rewards', reward.id), {
+          ...reward,
+          image: e,
         })
       })
       .finally(() => {

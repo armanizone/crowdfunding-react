@@ -1,5 +1,4 @@
 import React from 'react'
-import { EditProjectProps } from '../../../pages/project/edit'
 import { CreateButtons } from '../../../components'
 
 import cn from 'classnames'

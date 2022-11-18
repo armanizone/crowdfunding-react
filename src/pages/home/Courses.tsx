@@ -75,7 +75,7 @@ function Courses() {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
           {Array(4).fill(value).map((item, i) => {
             return (
-              <div className='mx-auto' key={i}>
+              <div  key={i}>
                 <Card
                   project={item}
                 />
